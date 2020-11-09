@@ -1,0 +1,13 @@
+D:\blotout\RustCSharp\RustCSharp\bin\Debug\netcoreapp3.1\RustCSharp.exe
+D:\blotout\RustCSharp\RustCSharp\bin\Debug\netcoreapp3.1\RustCSharp.deps.json
+D:\blotout\RustCSharp\RustCSharp\bin\Debug\netcoreapp3.1\RustCSharp.runtimeconfig.json
+D:\blotout\RustCSharp\RustCSharp\bin\Debug\netcoreapp3.1\RustCSharp.runtimeconfig.dev.json
+D:\blotout\RustCSharp\RustCSharp\bin\Debug\netcoreapp3.1\RustCSharp.dll
+D:\blotout\RustCSharp\RustCSharp\bin\Debug\netcoreapp3.1\RustCSharp.pdb
+D:\blotout\RustCSharp\RustCSharp\obj\Debug\netcoreapp3.1\RustCSharp.csprojAssemblyReference.cache
+D:\blotout\RustCSharp\RustCSharp\obj\Debug\netcoreapp3.1\RustCSharp.AssemblyInfoInputs.cache
+D:\blotout\RustCSharp\RustCSharp\obj\Debug\netcoreapp3.1\RustCSharp.AssemblyInfo.cs
+D:\blotout\RustCSharp\RustCSharp\obj\Debug\netcoreapp3.1\RustCSharp.csproj.CoreCompileInputs.cache
+D:\blotout\RustCSharp\RustCSharp\obj\Debug\netcoreapp3.1\RustCSharp.dll
+D:\blotout\RustCSharp\RustCSharp\obj\Debug\netcoreapp3.1\RustCSharp.pdb
+D:\blotout\RustCSharp\RustCSharp\obj\Debug\netcoreapp3.1\RustCSharp.genruntimeconfig.cache
