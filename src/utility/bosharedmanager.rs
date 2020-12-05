@@ -40,7 +40,7 @@ impl BOSharedManager {
     pub fn set_sdk_enabled(&mut self, sdk_enabled: bool) {
         self.sdk_enabled = sdk_enabled;
     }
-    
+
     pub fn set_session_id(&mut self, sessionid: String) {
         self.session_id = sessionid;
     }
