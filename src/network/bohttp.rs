@@ -89,7 +89,14 @@ impl BOManifestAPI for BOHttpClient {
             .json::<BOManifestRoot>()
             .await?;
 
-        BOSHAREDINSTANCE.lock().unwrap().set_manifest(response);
+        BOSHAREDINSTANCE
+            .lock()
+            .unwrap()
+            .set_manifest(response.to_owned());
+        BOSHAREDINSTANCE
+            .lock()
+            .unwrap()
+            .set_sdk_enabled(!response.variables.is_empty());
 
         Ok(())
     }
@@ -98,6 +105,10 @@ impl BOManifestAPI for BOHttpClient {
 #[async_trait]
 impl BOEventAPI for BOHttpClient {
     async fn send_event(&self, event_name: &str, event_info: Value) -> Result<(), Error> {
+        if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
+            return Ok(());
+        }
+
         let mut events_arr: Vec<BOEvent> = Vec::new();
 
         let event_model = BOEvent {
@@ -141,6 +152,10 @@ impl BOEventAPI for BOHttpClient {
     }
 
     async fn send_session_start(&self) -> Result<(), Error> {
+        if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
+            return Ok(());
+        }
+
         let mut events_arr: Vec<BOEvent> = Vec::new();
 
         let event_model = BOEvent {
@@ -180,6 +195,10 @@ impl BOEventAPI for BOHttpClient {
     }
 
     async fn send_session_end(&self) -> Result<(), Error> {
+        if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
+            return Ok(());
+        }
+
         let mut events_arr: Vec<BOEvent> = Vec::new();
 
         let event_model = BOEvent {
@@ -267,6 +286,10 @@ impl BOEventSecureDataAPI for BOHttpClient {
     }
 
     async fn send_pii_event(&self, event_name: &str, event_info: Value) -> Result<(), Error> {
+        if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
+            return Ok(());
+        }
+
         let mut events_arr: Vec<BOEvent> = Vec::new();
 
         let event_model = BOEvent {
@@ -381,6 +404,10 @@ impl BOEventSecureDataAPI for BOHttpClient {
     }
 
     async fn send_phi_event(&self, event_name: &str, event_info: Value) -> Result<(), Error> {
+        if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
+            return Ok(());
+        }
+
         let mut events_arr: Vec<BOEvent> = Vec::new();
 
         let event_model = BOEvent {

@@ -10,6 +10,8 @@ pub struct BOSharedManager {
     pub bundle_id: String,
     pub log_enabled: bool,
     pub user_id: String,
+    pub sdk_enabled: bool,
+    pub session_id: String,
 }
 
 impl BOSharedManager {

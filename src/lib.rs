@@ -38,10 +38,12 @@ pub async fn bo_sdk_init(token: String, end_point: String, bundle_id: String) ->
     let response = client.get_manifest().await;
 
     if response.is_ok() {
+        println!("SDK Intialized");
         let session_response = client.send_session_start().await;
         println!("{:?}", session_response.is_err());
         true
     } else {
+        println!("SDK Intialization Error, Please check sdk key and end point !");
         false
     }
 }
