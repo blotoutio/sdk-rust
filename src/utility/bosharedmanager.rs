@@ -36,6 +36,14 @@ impl BOSharedManager {
     pub fn set_user_id(&mut self, userid: String) {
         self.user_id = userid;
     }
+
+    pub fn set_sdk_enabled(&mut self, sdk_enabled: bool) {
+        self.sdk_enabled = sdk_enabled;
+    }
+    
+    pub fn set_session_id(&mut self, sessionid: String) {
+        self.session_id = sessionid;
+    }
 }
 
 lazy_static! {
