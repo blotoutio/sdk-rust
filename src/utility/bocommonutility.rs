@@ -8,11 +8,10 @@ use std::vec::Vec;
 extern crate crypto;
 extern crate rand;
 use crypto::buffer::{BufferResult, ReadBuffer, WriteBuffer};
-use crypto::md5::Md5;
+use crypto::sha1::Sha1;
 use crypto::{aes, blockmodes, buffer, symmetriccipher};
 use rand::rngs::OsRng;
 use rsa::{PaddingScheme, PublicKey, RSAPublicKey};
-
 const BO_CUSTOM_CODE: u64 = 21100;
 
 #[derive(Default)]
@@ -95,65 +94,26 @@ impl BOCommonUtility {
     //get codified events of a event name
     pub fn code_for_custom_codified_event(&self, event_name: String) -> u64 {
         let event = event_name.trim().to_string();
-        let event_name_int_sum;
-        //let isAscii = BOCommonUtils.isPureAscii(eventName);
-        let is_ascii = event.is_ascii();
-        if is_ascii {
-            event_name_int_sum = self.get_ascii_custom_int_sum(event, false);
-        } else {
-            event_name_int_sum =
-                self.get_string_md5_custom_int_sum_with_char_index_added(event, false);
-        }
-
-        let event_name_int_sum_modulo = event_name_int_sum % 9000;
+        let event_name_int_sum = self.get_hash_int_sum(event);
+        let event_name_int_sum_modulo = event_name_int_sum % 900;
         BO_CUSTOM_CODE + event_name_int_sum_modulo
     }
 
-    pub fn get_string_md5_custom_int_sum_with_char_index_added(
-        &self,
-        input_string: String,
-        is_case_senstive: bool,
-    ) -> u64 {
-        let mut string_to_hash = input_string;
-        if is_case_senstive {
-            string_to_hash = string_to_hash;
-        } else {
-            string_to_hash = string_to_hash.to_lowercase();
-        }
-        // create a Md5 hasher instance
-        let mut hasher = Md5::new();
-        hasher.input_str(string_to_hash.as_str());
-        let md5_string = hasher.output_bytes().to_string();
-
+    pub fn get_hash_int_sum(&self, input: String) -> u64 {
+        let input_str = input.to_lowercase();
+        let sha1_string = self.get_sha1_hex(input_str);
         let mut sum = 0;
-
-        for (index, char_val) in md5_string.chars().enumerate() {
-            if self.is_number_char(char_val) {
-                sum += self.int_value_for_char(char_val);
-            } else {
-                sum += self.int_value_for_char(char_val) + index as u64;
-            }
+        for char_val in sha1_string.chars() {
+            sum += char_val as u64;
         }
 
         sum
     }
 
-    pub fn get_ascii_custom_int_sum(&self, input: String, is_case_senstive: bool) -> u64 {
-        let mut input_str = input;
-        if is_case_senstive {
-            input_str = input_str;
-        } else {
-            input_str = input_str.to_lowercase();
-        }
-
-        let mut sum = 0;
-        if input_str.is_ascii() {
-            for char_val in input_str.chars() {
-                sum += self.int_value_for_char(char_val);
-            }
-        }
-
-        sum
+    pub fn get_sha1_hex(&self, input: String) -> String {
+        let mut hasher = Sha1::new();
+        hasher.input_str(input.as_str());
+        hasher.result_str()
     }
 
     //check if char is a number
