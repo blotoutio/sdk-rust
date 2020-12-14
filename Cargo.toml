@@ -37,3 +37,6 @@ panic = 'abort'
 
 [profile.dev]
 panic = "abort"
+
+[dev-dependencies]
+tokio-test = "0.3.0"
