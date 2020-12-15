@@ -1,4 +1,5 @@
 use blotout::utility::bocommonutility::BOSHAREDCOMMONUTILITYINSTANCE;
+use blotout::utility::boerror::BOError;
 use blotout::utility::bofilemanager::BOSHAREDFILEINSTANCE;
 use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
 use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
@@ -222,4 +223,19 @@ pub fn test_shared_manager() {
         BOSHAREDINSTANCE.lock().unwrap().session_id,
         "session_id".to_string()
     );
+}
+
+#[test]
+fn test_enum() {
+    assert!(Some(BOError::ManifestNotAvailable).is_some());
+}
+
+#[test]
+fn test_get_sub_string() {
+    let uuid: String = "Blotout Inc".to_string();
+    let sub_string = BOSHAREDCOMMONUTILITYINSTANCE
+        .lock()
+        .unwrap()
+        .get_sub_string(0, 4, uuid);
+    assert_eq!(sub_string, "Blot".to_string());
 }

@@ -2,6 +2,7 @@ use blotout::model::bomanifestmodel::BOManifestVariable;
 use blotout::network::boeventapi::BOEventAPI;
 use blotout::network::boeventsecuredataapi::BOEventSecureDataAPI;
 use blotout::network::bohttp::BOHttpClient;
+use blotout::network::bohttp::BOManifestRequestModel;
 use blotout::network::bomanifestapi::BOManifestAPI;
 use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
 use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
@@ -180,4 +181,12 @@ fn test_get_manifest_variable() {
         client.get_manifest_variable("PII_Public_Key".to_string());
 
     assert!(Some(pii_manifest_variable).is_some());
+}
+
+#[test]
+fn test_manifest_request_model() {
+    let manifest_request_model = BOManifestRequestModel {
+        ..Default::default()
+    };
+    assert!(Some(manifest_request_model).is_some());
 }
