@@ -206,4 +206,13 @@ impl BOCommonUtility {
 
         Ok(final_result)
     }
+
+    pub fn get_timezone_offset(&self) -> i64 {
+        let tz_offset = (chrono::offset::Local::now()
+            .date()
+            .offset()
+            .local_minus_utc()
+            / 60) as i64;
+        tz_offset
+    }
 }

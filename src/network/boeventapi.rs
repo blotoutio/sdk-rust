@@ -14,6 +14,12 @@ pub trait BOEventAPI {
     //send session sent when app exits, user have to call this explicitly
     async fn send_session_end(&self) -> Result<(), Error>;
 
+    //send session sent when app exits, user have to call this explicitly
+    fn get_session_info_model(&self) -> BOEvent;
+
+    //get final payload
+    fn get_payload(&self, events: Vec<BOEvent>) -> BOEventModel;
+
     //method to push events using given model
     async fn publish_events(&self, event_model: BOEventModel) -> Result<(), Error>;
 }

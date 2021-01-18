@@ -239,3 +239,11 @@ fn test_get_sub_string() {
         .get_sub_string(0, 4, uuid);
     assert_eq!(sub_string, "Blot".to_string());
 }
+#[test]
+fn test_get_timezone_offset() {
+    let timezone_offset = BOSHAREDCOMMONUTILITYINSTANCE
+        .lock()
+        .unwrap()
+        .get_timezone_offset();
+    assert_eq!(timezone_offset, 330);
+}

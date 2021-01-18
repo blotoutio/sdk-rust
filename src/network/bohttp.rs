@@ -126,18 +126,7 @@ impl BOEventAPI for BOHttpClient {
 
         events_arr.push(event_model);
 
-        let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
-        let event_model = BOEventModel {
-            geo: BOGeo {
-                ..Default::default()
-            },
-            meta: BOMeta {
-                osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
-                plf: plf_code,
-                ..Default::default()
-            },
-            events: events_arr,
-        };
+        let event_model = self.get_payload(events_arr);
 
         if BOSHAREDINSTANCE.lock().unwrap().log_enabled {
             println!(
@@ -169,18 +158,7 @@ impl BOEventAPI for BOHttpClient {
 
         events_arr.push(event_model);
 
-        let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
-        let event_model = BOEventModel {
-            geo: BOGeo {
-                ..Default::default()
-            },
-            meta: BOMeta {
-                osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
-                plf: plf_code,
-                ..Default::default()
-            },
-            events: events_arr,
-        };
+        let event_model = self.get_payload(events_arr);
 
         if BOSHAREDINSTANCE.lock().unwrap().log_enabled {
             println!(
@@ -212,18 +190,7 @@ impl BOEventAPI for BOHttpClient {
 
         events_arr.push(event_model);
 
-        let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
-        let event_model = BOEventModel {
-            geo: BOGeo {
-                ..Default::default()
-            },
-            meta: BOMeta {
-                osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
-                plf: plf_code,
-                ..Default::default()
-            },
-            events: events_arr,
-        };
+        let event_model = self.get_payload(events_arr);
 
         if BOSHAREDINSTANCE.lock().unwrap().log_enabled {
             println!(
@@ -235,6 +202,30 @@ impl BOEventAPI for BOHttpClient {
         let response = self.publish_events(event_model).await;
 
         response
+    }
+
+    fn get_payload(&self, events_arr: Vec<BOEvent>) -> BOEventModel {
+        let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
+        let sdk_version = env!("CARGO_PKG_VERSION").to_string();
+
+        let event_model = BOEventModel {
+            geo: BOGeo {
+                ..Default::default()
+            },
+            meta: BOMeta {
+                osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
+                plf: plf_code,
+                sdkv: sdk_version,
+                tz_offset: BOSHAREDCOMMONUTILITYINSTANCE
+                    .lock()
+                    .unwrap()
+                    .get_timezone_offset(),
+                ..Default::default()
+            },
+            events: events_arr,
+        };
+
+        event_model
     }
 
     async fn publish_events(&self, event_model: BOEventModel) -> Result<(), Error> {
@@ -333,6 +324,8 @@ impl BOEventSecureDataAPI for BOHttpClient {
 
         //preparing final model
         let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
+        let sdk_version = env!("CARGO_PKG_VERSION").to_string();
+
         let event_data_model = BOEventSecureDataModel {
             geo: BOGeo {
                 ..Default::default()
@@ -340,6 +333,11 @@ impl BOEventSecureDataAPI for BOHttpClient {
             meta: BOMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
+                sdkv: sdk_version,
+                tz_offset: BOSHAREDCOMMONUTILITYINSTANCE
+                    .lock()
+                    .unwrap()
+                    .get_timezone_offset(),
                 ..Default::default()
             },
             pii: BOSecureData {
@@ -449,6 +447,8 @@ impl BOEventSecureDataAPI for BOHttpClient {
 
         //preparing final model
         let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
+        let sdk_version = env!("CARGO_PKG_VERSION").to_string();
+
         let event_data_model = BOEventSecureDataModel {
             geo: BOGeo {
                 ..Default::default()
@@ -456,6 +456,11 @@ impl BOEventSecureDataAPI for BOHttpClient {
             meta: BOMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
+                sdkv: sdk_version,
+                tz_offset: BOSHAREDCOMMONUTILITYINSTANCE
+                    .lock()
+                    .unwrap()
+                    .get_timezone_offset(),
                 ..Default::default()
             },
             phi: BOSecureData {

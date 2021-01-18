@@ -36,6 +36,8 @@ pub struct BOMeta {
     pub jbrkn: bool,
     pub osn: String,
     pub appv: String,
+    pub sdkv: String,
+    pub tz_offset: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
