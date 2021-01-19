@@ -21,8 +21,9 @@ async fn main() {
         .to_string();
     bo_log_event("rust_event".to_string(), data).await;
 
-    let map_data = "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
-        .to_string();
+    let map_data =
+        "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
+            .to_string();
 
     bo_map_id("abcd".to_string(), "google".to_string(), map_data).await;
 
