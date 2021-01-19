@@ -6,6 +6,10 @@ use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
 use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
 use serde_json::Value;
 
+const BO_EVENT_MAP_ID: u64 = 21001;
+const BO_MAP_ID: &str = "map_id";
+const BO_MAP_PROVIDER: &str = "map_provider";
+
 #[tokio::main]
 async fn main() {
     bo_log_enabled(true);
@@ -133,14 +137,14 @@ pub async fn bo_map_id(id: String, provider: String, data: String) -> bool {
 
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
     let mut map_object = data.as_object().unwrap().clone();
-    map_object.insert("map_id".to_string(), serde_json::Value::String(id));
+    map_object.insert(BO_MAP_ID.to_string(), serde_json::Value::String(id));
     map_object.insert(
-        "map_provider".to_string(),
+        BO_MAP_PROVIDER.to_string(),
         serde_json::Value::String(provider),
     );
 
     let payload: Value = Value::Object(map_object);
 
-    let response = client.send_event("map_id", payload, 21001).await;
+    let response = client.send_event(BO_MAP_ID, payload, BO_EVENT_MAP_ID).await;
     response.is_ok()
 }
