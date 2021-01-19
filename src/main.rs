@@ -21,6 +21,11 @@ async fn main() {
         .to_string();
     bo_log_event("rust_event".to_string(), data).await;
 
+    let map_data = "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
+        .to_string();
+
+    bo_map_id("abcd".to_string(), "google".to_string(), map_data).await;
+
     let pii_data =
         "{\"email id\": \"ankuradhikari08@gmail.com\", \"gender\": \"male\"}".to_string();
     bo_log_pii_event("PII Event".to_string(), pii_data).await;
@@ -92,7 +97,7 @@ async fn bo_log_event(event_name: String, data: String) -> bool {
     );
 
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
-    let response = client.send_event(event_name.as_str(), data).await;
+    let response = client.send_event(event_name.as_str(), data, 0).await;
     response.is_ok()
 }
 
@@ -116,5 +121,25 @@ async fn bo_log_phi_event(event_name: String, data: String) -> bool {
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
     //let data =json!(data);
     let response = client.send_phi_event(event_name.as_str(), data).await;
+    response.is_ok()
+}
+
+pub async fn bo_map_id(id: String, provider: String, data: String) -> bool {
+    let client = BOHttpClient::new(
+        reqwest::Client::new(),
+        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
+    );
+
+    let data: Value = serde_json::from_str(data.as_str()).unwrap();
+    let mut map_object = data.as_object().unwrap().clone();
+    map_object.insert("map_id".to_string(), serde_json::Value::String(id));
+    map_object.insert(
+        "map_provider".to_string(),
+        serde_json::Value::String(provider),
+    );
+
+    let payload: Value = Value::Object(map_object);
+
+    let response = client.send_event("map_id", payload, 21001).await;
     response.is_ok()
 }

@@ -24,6 +24,10 @@ use serde_json::{json, Value};
 use std::vec::Vec;
 
 const BO_CRYPTO_IV: &str = "Q0BG17E2819IWZYQ";
+const BO_EVENT_DEVELOPER_CODED_KEY: u64 = 20001;
+const BO_EVENT_SYSTEM_KEY: u64 = 10001;
+const BO_EVENT_SDK_START: u64 = 11130;
+const BO_SDK_START: &str = "sdk_start";
 
 pub struct BOHttpClient {
     client: reqwest::Client,
@@ -104,9 +108,23 @@ impl BOManifestAPI for BOHttpClient {
 
 #[async_trait]
 impl BOEventAPI for BOHttpClient {
-    async fn send_event(&self, event_name: &str, event_info: Value) -> Result<(), Error> {
+    async fn send_event(
+        &self,
+        event_name: &str,
+        event_info: Value,
+        event_code: u64,
+    ) -> Result<(), Error> {
         if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
             return Ok(());
+        }
+
+        let mut event_sub_code = event_code;
+
+        if (event_code == 0) {
+            event_sub_code = BOSHAREDCOMMONUTILITYINSTANCE
+                .lock()
+                .unwrap()
+                .code_for_custom_codified_event(event_name.to_string());
         }
 
         let mut events_arr: Vec<BOEvent> = Vec::new();
@@ -114,11 +132,8 @@ impl BOEventAPI for BOHttpClient {
         let event_model = BOEvent {
             evn: event_name.to_string(),
             properties: event_info,
-            evc: 20001,
-            evcs: BOSHAREDCOMMONUTILITYINSTANCE
-                .lock()
-                .unwrap()
-                .code_for_custom_codified_event(event_name.to_string()),
+            evc: BO_EVENT_DEVELOPER_CODED_KEY,
+            evcs: event_sub_code,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
             ..Default::default()
@@ -148,9 +163,9 @@ impl BOEventAPI for BOHttpClient {
         let mut events_arr: Vec<BOEvent> = Vec::new();
 
         let event_model = BOEvent {
-            evn: "Session Start".to_string(),
-            evc: 10001,
-            evcs: 11011,
+            evn: BO_SDK_START.to_string(),
+            evc: BO_EVENT_SYSTEM_KEY,
+            evcs: BO_EVENT_SDK_START,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
             ..Default::default()
@@ -181,7 +196,7 @@ impl BOEventAPI for BOHttpClient {
 
         let event_model = BOEvent {
             evn: "Session End".to_string(),
-            evc: 10001,
+            evc: BO_EVENT_SYSTEM_KEY,
             evcs: 11012,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),

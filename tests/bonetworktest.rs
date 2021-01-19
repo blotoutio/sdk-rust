@@ -64,7 +64,7 @@ async fn test_log_event() {
     );
 
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
-    let response = client.send_event("event_name", data).await;
+    let response = client.send_event("event_name", data, 0).await;
 
     if response.is_ok() {
         assert!(true)

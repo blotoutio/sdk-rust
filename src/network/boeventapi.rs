@@ -6,7 +6,12 @@ use serde_json::Value;
 #[async_trait]
 pub trait BOEventAPI {
     /// Send a single message to Blotout.
-    async fn send_event(&self, event_name: &str, event_info: Value) -> Result<(), Error>;
+    async fn send_event(
+        &self,
+        event_name: &str,
+        event_info: Value,
+        event_code: u64,
+    ) -> Result<(), Error>;
 
     //send session start event on sdk initilization
     async fn send_session_start(&self) -> Result<(), Error>;
