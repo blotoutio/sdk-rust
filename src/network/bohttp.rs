@@ -243,6 +243,39 @@ impl BOEventAPI for BOHttpClient {
         event_model
     }
 
+    fn get_session_info_model(&self) -> BOEvent {
+        let end_time = Utc::now().timestamp_millis();
+        let start_time = BOSHAREDINSTANCE
+            .lock()
+            .unwrap()
+            .session_id
+            .to_string()
+            .parse::<i64>()
+            .unwrap();
+        let duration_time = end_time - start_time;
+        let session_info = BOSessionInfo {
+            start: start_time,
+            end: end_time,
+            duration: duration_time,
+        };
+
+        let session_string = serde_json::to_string(&session_info).unwrap();
+        let session_value = serde_json::from_str(session_string.as_str()).unwrap();
+
+        let event_model = BOEvent {
+            evn: "Session Info".to_string(),
+            evc: 10001,
+            evcs: 11024,
+            evt: Utc::now().timestamp_millis(),
+            userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
+            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
+            properties: session_value,
+            ..Default::default()
+        };
+
+        event_model
+    }
+
     async fn publish_events(&self, event_model: BOEventModel) -> Result<(), Error> {
         let path = "/sdk/v1/events/publish";
 
