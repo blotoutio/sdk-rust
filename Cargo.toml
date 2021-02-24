@@ -1,6 +1,6 @@
 [package]
 name = "blotout"
-version = "0.1.0"
+version = "0.5.1"
 authors = ["Blotout Inc <support@blotout.io>"]
 edition = "2018"
 

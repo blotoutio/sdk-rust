@@ -24,8 +24,6 @@ use serde_json::{json, Value};
 use std::vec::Vec;
 
 const BO_CRYPTO_IV: &str = "Q0BG17E2819IWZYQ";
-const BO_EVENT_DEVELOPER_CODED_KEY: u64 = 20001;
-const BO_EVENT_SYSTEM_KEY: u64 = 10001;
 const BO_EVENT_SDK_START: u64 = 11130;
 const BO_SDK_START: &str = "sdk_start";
 
@@ -132,7 +130,6 @@ impl BOEventAPI for BOHttpClient {
         let event_model = BOEvent {
             evn: event_name.to_string(),
             properties: event_info,
-            evc: BO_EVENT_DEVELOPER_CODED_KEY,
             evcs: event_sub_code,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
@@ -164,7 +161,6 @@ impl BOEventAPI for BOHttpClient {
 
         let event_model = BOEvent {
             evn: BO_SDK_START.to_string(),
-            evc: BO_EVENT_SYSTEM_KEY,
             evcs: BO_EVENT_SDK_START,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
@@ -196,7 +192,6 @@ impl BOEventAPI for BOHttpClient {
 
         let event_model = BOEvent {
             evn: "Session End".to_string(),
-            evc: BO_EVENT_SYSTEM_KEY,
             evcs: 11012,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
@@ -264,7 +259,6 @@ impl BOEventAPI for BOHttpClient {
 
         let event_model = BOEvent {
             evn: "Session Info".to_string(),
-            evc: 10001,
             evcs: 11024,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
@@ -334,7 +328,6 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let event_model = BOEvent {
             evn: event_name.to_string(),
             properties: event_info,
-            evc: 20001,
             evcs: BOSHAREDCOMMONUTILITYINSTANCE
                 .lock()
                 .unwrap()
@@ -459,7 +452,6 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let event_model = BOEvent {
             evn: event_name.to_string(),
             properties: event_info,
-            evc: 20001,
             evcs: BOSHAREDCOMMONUTILITYINSTANCE
                 .lock()
                 .unwrap()

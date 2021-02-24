@@ -50,7 +50,6 @@ pub struct BOEvent {
     pub evcs: u64,
     pub uustate: Vec<i64>,
     pub userid: String,
-    pub evdc: i64,
     pub value: String,
     pub scrn: String,
     pub evt: i64,
@@ -59,7 +58,15 @@ pub struct BOEvent {
     pub tst: i64,
     pub nvg: Vec<String>,
     pub nmo: i64,
-    pub evc: u64,
+    #[serde(rename = "session_id")]
+    pub session_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BOSessionInfo {
+    pub start: i64,
+    pub end: i64,
+    pub duration: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
