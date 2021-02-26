@@ -3,6 +3,7 @@ use crate::model::boeventmodel::BOEventModel;
 use crate::model::boeventmodel::BOEventSecureDataModel;
 use crate::model::boeventmodel::BOGeo;
 use crate::model::boeventmodel::BOMeta;
+use crate::model::boeventmodel::BOPropertiesInfo;
 use crate::model::boeventmodel::BOSecureData;
 use crate::model::bomanifestmodel::BOManifestRoot;
 use crate::model::bomanifestmodel::BOManifestVariable;
@@ -126,10 +127,14 @@ impl BOEventAPI for BOHttpClient {
         }
 
         let mut events_arr: Vec<BOEvent> = Vec::new();
+        let event_properties = BOPropertiesInfo {
+            codified_info: event_info,
+            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
+        };
 
         let event_model = BOEvent {
             evn: event_name.to_string(),
-            properties: event_info,
+            properties: event_properties,
             evcs: event_sub_code,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
@@ -158,12 +163,17 @@ impl BOEventAPI for BOHttpClient {
         }
 
         let mut events_arr: Vec<BOEvent> = Vec::new();
+        let event_properties = BOPropertiesInfo {
+            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
+            ..Default::default()
+        };
 
         let event_model = BOEvent {
             evn: BO_SDK_START.to_string(),
             evcs: BO_EVENT_SDK_START,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
+            properties: event_properties,
             ..Default::default()
         };
 
@@ -189,12 +199,17 @@ impl BOEventAPI for BOHttpClient {
         }
 
         let mut events_arr: Vec<BOEvent> = Vec::new();
+        let event_properties = BOPropertiesInfo {
+            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
+            ..Default::default()
+        };
 
         let event_model = BOEvent {
             evn: "Session End".to_string(),
             evcs: 11012,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
+            properties: event_properties,
             ..Default::default()
         };
 
@@ -256,14 +271,17 @@ impl BOEventAPI for BOHttpClient {
 
         let session_string = serde_json::to_string(&session_info).unwrap();
         let session_value = serde_json::from_str(session_string.as_str()).unwrap();
+        let event_properties = BOPropertiesInfo {
+            codified_info: session_value,
+            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
+        };
 
         let event_model = BOEvent {
             evn: "Session Info".to_string(),
             evcs: 11024,
             evt: Utc::now().timestamp_millis(),
             userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
-            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
-            properties: session_value,
+            properties: event_properties,
             ..Default::default()
         };
 
@@ -324,10 +342,14 @@ impl BOEventSecureDataAPI for BOHttpClient {
         }
 
         let mut events_arr: Vec<BOEvent> = Vec::new();
+        let event_properties = BOPropertiesInfo {
+            codified_info: event_info,
+            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
+        };
 
         let event_model = BOEvent {
             evn: event_name.to_string(),
-            properties: event_info,
+            properties: event_properties,
             evcs: BOSHAREDCOMMONUTILITYINSTANCE
                 .lock()
                 .unwrap()
@@ -448,10 +470,14 @@ impl BOEventSecureDataAPI for BOHttpClient {
         }
 
         let mut events_arr: Vec<BOEvent> = Vec::new();
+        let event_properties = BOPropertiesInfo {
+            codified_info: event_info,
+            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
+        };
 
         let event_model = BOEvent {
             evn: event_name.to_string(),
-            properties: event_info,
+            properties: event_properties,
             evcs: BOSHAREDCOMMONUTILITYINSTANCE
                 .lock()
                 .unwrap()

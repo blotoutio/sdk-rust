@@ -53,13 +53,11 @@ pub struct BOEvent {
     pub value: String,
     pub scrn: String,
     pub evt: i64,
-    pub properties: Value,
+    pub properties: BOPropertiesInfo,
     pub nvg_tm: Vec<f64>,
     pub tst: i64,
     pub nvg: Vec<String>,
     pub nmo: i64,
-    #[serde(rename = "session_id")]
-    pub session_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -67,6 +65,13 @@ pub struct BOSessionInfo {
     pub start: i64,
     pub end: i64,
     pub duration: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BOPropertiesInfo {
+    #[serde(rename = "codifiedInfo")]
+    pub codified_info: Value,
+    pub session_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
