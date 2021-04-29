@@ -15,9 +15,8 @@ async fn main() {
     bo_log_enabled(true);
 
     bo_sdk_init(
-        "BEZAVGGW4GZZZ3N".to_string(),
-        "http://stage.blotout.io".to_string(),
-        "com.blotout.rustsaleDemoApp".to_string(),
+        "7T3VGKRTMZND4Q9".to_string(),
+        "http://stage.blotout.io/sdk".to_string(),
     )
     .await;
 
@@ -46,15 +45,11 @@ fn bo_log_enabled(log_enabled: bool) {
         .set_log_enabled(log_enabled);
 }
 
-async fn bo_sdk_init(token: String, end_point: String, bundle_id: String) -> bool {
+async fn bo_sdk_init(token: String, end_point: String) -> bool {
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
         .set_base_url(end_point.to_string());
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
-        .set_bundle_id(bundle_id.to_string());
     BOSHAREDINSTANCE
         .lock()
         .unwrap()

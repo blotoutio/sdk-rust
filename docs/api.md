@@ -4,20 +4,18 @@
 The `bo_sdk_init` method is used for initializing SDK. This sets all required configurations and also sends system event `sdk_start` which allows it to record user.
 
 #### Input
-`pub async fn bo_sdk_init(token: String, end_point: String, bundle_id: String) -> bool`
+`pub async fn bo_sdk_init(token: String, end_point: String) -> bool`
 
 |||||
 |---|---|---|---|
 | `token` | `String` | Application token that you can get in your dashboard |
 | `end_point` | `String` | Url where you will be sending data |
-| `bundle_id` | `bundle_id` | bundle id of the application |
 
 #### Example
 ```js
 bo_sdk_init(
         TOKEN.to_string(),
         END_POINT.to_string(),
-        BUNDLE_ID.to_string(),
     ).await;
 ```
 
@@ -99,6 +97,3 @@ data = r#"{
 }"#;
 bo_map_id(id.to_string(), provider.to_string(), data.to_string()).await;
 ```
-
-
-

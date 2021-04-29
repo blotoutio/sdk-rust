@@ -15,9 +15,7 @@ Initialize sdk with data that we generated in Application section on Blotout Das
 bo_sdk_init(
     TOKEN.to_string(),
     END_POINT.to_string(),
-    BUNDLE_ID.to_string(),
 )
 .await;
 
 ```
-

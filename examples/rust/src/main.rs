@@ -2,13 +2,18 @@ use blotout::bo_log_event;
 use blotout::bo_log_phi_event;
 use blotout::bo_log_pii_event;
 use blotout::bo_sdk_init;
+use blotout::bo_log_enabled;
 
-const TOKEN: &str = "JB8RWCP66GFTH98"; // Application key
-const END_POINT: &str = "https://staging.foobar.com/sdk"; // <1P Container Domain>
-const BUNDLE_ID: &str = "com.domain.fooBar"; // Application Unique Bundle ID
+const TOKEN: &str = "7T3VGKRTMZND4Q9"; // Application key
+const END_POINT: &str = "https://stage.blotout.io/sdk"; // <1P Container Domain>
 
 #[tokio::main]
 async fn main() {
+  /*
+    Enable logging
+   */
+  bo_log_enabled(true);
+
    /*
       Initialize sdk with data that we generated in
       Application section on Blotout Dashboard
@@ -16,7 +21,6 @@ async fn main() {
     bo_sdk_init(
         TOKEN.to_string(),
         END_POINT.to_string(),
-        BUNDLE_ID.to_string(),
     )
     .await;
 

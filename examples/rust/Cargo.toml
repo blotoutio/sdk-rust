@@ -5,6 +5,6 @@ authors = ["Blotout Inc <support@blotout.io>"]
 edition = "2018"
 
 [dependencies]
-blotout = {path = "../..", version = "0.1.0"}
+blotout = {path = "../..", version = "0.7.0"}
 futures = "0.3"
 tokio = { version = "0.2", features = ["full","macros"] }

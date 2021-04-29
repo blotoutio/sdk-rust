@@ -27,6 +27,4 @@ pub struct BOManifestVariable {
     pub variable_data_type: i64,
     #[serde(rename = "variableName")]
     pub variable_name: String,
-    #[serde(rename = "isEditable")]
-    pub is_editable: bool,
 }

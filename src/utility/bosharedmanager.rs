@@ -7,7 +7,6 @@ pub struct BOSharedManager {
     pub manifest: BOManifestRoot,
     pub token: String,
     pub base_url: String,
-    pub bundle_id: String,
     pub log_enabled: bool,
     pub user_id: String,
     pub sdk_enabled: bool,
@@ -25,10 +24,6 @@ impl BOSharedManager {
 
     pub fn set_base_url(&mut self, newbaseurl: String) {
         self.base_url = newbaseurl;
-    }
-
-    pub fn set_bundle_id(&mut self, bundleid: String) {
-        self.bundle_id = bundleid;
     }
 
     pub fn set_log_enabled(&mut self, logenabled: bool) {

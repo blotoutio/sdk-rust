@@ -198,10 +198,6 @@ pub fn test_shared_manager() {
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
-        .set_bundle_id("bundle_id".to_string());
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
         .set_session_id("session_id".to_string());
 
     assert_eq!(BOSHAREDINSTANCE.lock().unwrap().sdk_enabled, true);
@@ -214,10 +210,6 @@ pub fn test_shared_manager() {
     assert_eq!(
         BOSHAREDINSTANCE.lock().unwrap().user_id,
         "user_id".to_string()
-    );
-    assert_eq!(
-        BOSHAREDINSTANCE.lock().unwrap().bundle_id,
-        "bundle_id".to_string()
     );
     assert_eq!(
         BOSHAREDINSTANCE.lock().unwrap().session_id,

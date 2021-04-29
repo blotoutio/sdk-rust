@@ -2,7 +2,6 @@ use blotout::model::bomanifestmodel::BOManifestVariable;
 use blotout::network::boeventapi::BOEventAPI;
 use blotout::network::boeventsecuredataapi::BOEventSecureDataAPI;
 use blotout::network::bohttp::BOHttpClient;
-use blotout::network::bohttp::BOManifestRequestModel;
 use blotout::network::bomanifestapi::BOManifestAPI;
 use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
 use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
@@ -26,10 +25,6 @@ pub fn set_sdk_info() {
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
-        .set_bundle_id("com.blotout.devrust".to_string());
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
         .set_token("UT72JZHRHDUQD5M".to_string());
 }
 
@@ -39,7 +34,7 @@ async fn sdk_init() {
 
     let client = BOHttpClient::new(
         reqwest::Client::new(),
-        "https://stage.blotout.io".to_owned(),
+        "https://stage.blotout.io/sdk".to_owned(),
     );
 
     let response = client.get_manifest().await;
@@ -181,12 +176,4 @@ fn test_get_manifest_variable() {
         client.get_manifest_variable("PII_Public_Key".to_string());
 
     assert!(Some(pii_manifest_variable).is_some());
-}
-
-#[test]
-fn test_manifest_request_model() {
-    let manifest_request_model = BOManifestRequestModel {
-        ..Default::default()
-    };
-    assert!(Some(manifest_request_model).is_some());
 }

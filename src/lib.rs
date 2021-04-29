@@ -21,15 +21,11 @@ pub fn bo_log_enabled(log_enabled: bool) {
         .set_log_enabled(log_enabled);
 }
 
-pub async fn bo_sdk_init(token: String, end_point: String, bundle_id: String) -> bool {
+pub async fn bo_sdk_init(token: String, end_point: String) -> bool {
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
         .set_base_url(end_point.to_string());
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
-        .set_bundle_id(bundle_id.to_string());
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
@@ -42,12 +38,11 @@ pub async fn bo_sdk_init(token: String, end_point: String, bundle_id: String) ->
     let response = client.get_manifest().await;
 
     if response.is_ok() {
-        println!("SDK Intialized");
         let session_response = client.send_session_start().await;
         println!("{:?}", session_response.is_err());
         true
     } else {
-        println!("SDK Intialization Error, Please check sdk key and end point !");
+        println!("Manifest pull failed. Please check sdk key and end point!");
         false
     }
 }

@@ -8,17 +8,17 @@ extern "C" {
 
 namespace blotout {
 
-//default constructor 
+//default constructor
 BlotoutAnalytics::BlotoutAnalytics() {
 
 }
 
 BlotoutAnalytics::~BlotoutAnalytics() {
-  
+
 }
 
- void BlotoutAnalytics::initSDK(const char* token, const char* end_point,const char* bundle_id) {
-      bo_sdk_init(token, end_point,bundle_id);
+ void BlotoutAnalytics::initSDK(const char* token, const char* end_point) {
+      bo_sdk_init(token, end_point);
   }
 
   void BlotoutAnalytics::logEvent(const char* event_name,const char* json_string) {

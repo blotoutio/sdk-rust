@@ -30,14 +30,13 @@ namespace blotout {
     public:
         BlotoutAnalytics();
 
-        void initSDK(const char *token, 
-                        const char *end_point,
-                        const char *bundle_id);
-        void logEvent(const char *event_name, 
+        void initSDK(const char *token,
+                        const char *end_point);
+        void logEvent(const char *event_name,
                             const char *json_string);
-        void logPiiEvent(const char *event_name, 
+        void logPiiEvent(const char *event_name,
                                 const char *json_string);
-        void logPhiEvent(const char *event_name, 
+        void logPhiEvent(const char *event_name,
                                 const char *json_string);
         void sessionEnd(void);
 
@@ -46,4 +45,4 @@ namespace blotout {
         ~BlotoutAnalytics();
     }; // namespace blotout
 }
-#endif 
+#endif

@@ -17,10 +17,7 @@ use crate::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
 use async_trait::async_trait;
 use chrono::Utc;
 use failure::Error;
-use reqwest::header::HeaderMap;
-use reqwest::header::HeaderName;
-use reqwest::header::HeaderValue;
-use serde::{Deserialize, Serialize};
+use reqwest::header;
 use serde_json::{json, Value};
 use std::vec::Vec;
 
@@ -33,19 +30,11 @@ pub struct BOHttpClient {
     host: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BOManifestRequestModel {
-    #[serde(rename = "lastUpdatedTime")]
-    pub last_updated_time: i64,
-    #[serde(rename = "bundleId")]
-    pub bundle_id: String,
-}
-
 impl Default for BOHttpClient {
     fn default() -> Self {
         BOHttpClient {
             client: reqwest::Client::builder().build().unwrap(),
-            host: "http://dev.blotout.io".to_owned(),
+            host: "".to_owned(),
         }
     }
 }
@@ -60,33 +49,14 @@ impl BOHttpClient {
 #[async_trait]
 impl BOManifestAPI for BOHttpClient {
     async fn get_manifest(&self) -> Result<(), Error> {
-        let path = "/sdk/v1/manifest/pull";
-        let bundle_id_str = BOSHAREDINSTANCE.lock().unwrap().bundle_id.to_string();
-        let manifest_request = BOManifestRequestModel {
-            last_updated_time: 0,
-            bundle_id: bundle_id_str,
-        };
-
         let token_str = BOSHAREDINSTANCE.lock().unwrap().token.to_string();
-        let mut headers = HeaderMap::new();
-        headers.insert(
-            HeaderName::from_lowercase(b"token").unwrap(),
-            HeaderValue::from_str(token_str.as_str()).unwrap(),
-        );
-        headers.insert(
-            HeaderName::from_lowercase(b"content-type").unwrap(),
-            HeaderValue::from_str("application/json").unwrap(),
-        );
-        headers.insert(
-            HeaderName::from_lowercase(b"version").unwrap(),
-            HeaderValue::from_str("v1").unwrap(),
-        );
+        let path = "/v1/manifest/pull";
 
         let response = self
             .client
             .post(&format!("{}{}", self.host, path))
-            .headers(headers)
-            .json(&manifest_request)
+            .query(&[("token", token_str)])
+            .header(header::CONTENT_TYPE, "application/json")
             .send()
             .await?
             .json::<BOManifestRoot>()
@@ -289,27 +259,14 @@ impl BOEventAPI for BOHttpClient {
     }
 
     async fn publish_events(&self, event_model: BOEventModel) -> Result<(), Error> {
-        let path = "/sdk/v1/events/publish";
-
-        let mut headers = HeaderMap::new();
         let token_str = BOSHAREDINSTANCE.lock().unwrap().token.to_string();
-        headers.insert(
-            HeaderName::from_lowercase(b"token").unwrap(),
-            HeaderValue::from_str(token_str.as_str()).unwrap(),
-        );
-        headers.insert(
-            HeaderName::from_lowercase(b"content-type").unwrap(),
-            HeaderValue::from_str("application/json").unwrap(),
-        );
-        headers.insert(
-            HeaderName::from_lowercase(b"version").unwrap(),
-            HeaderValue::from_str("v1").unwrap(),
-        );
+        let path = "/v1/events/publish";
 
         let response = self
             .client
             .post(&format!("{}{}", self.host, path))
-            .headers(headers)
+            .query(&[("token", token_str)])
+            .header(header::CONTENT_TYPE, "application/json")
             .json(&event_model)
             .send()
             .await;
@@ -362,8 +319,6 @@ impl BOEventSecureDataAPI for BOHttpClient {
         events_arr.push(event_model);
 
         let data = json!(events_arr).to_string();
-        //public static final String Event_PHI_Public_Key = "PHI_Public_Key";
-        //public static final String Event_PII_Public_Key = "PII_Public_Key";
 
         //AES data encryption
         let uuid: String = BOSHAREDCOMMONUTILITYINSTANCE
@@ -429,27 +384,14 @@ impl BOEventSecureDataAPI for BOHttpClient {
         &self,
         event_model: BOEventSecureDataModel,
     ) -> Result<(), Error> {
-        let path = "/sdk/v1/events/publish";
-
-        let mut headers = HeaderMap::new();
         let token_str = BOSHAREDINSTANCE.lock().unwrap().token.to_string();
-        headers.insert(
-            HeaderName::from_lowercase(b"token").unwrap(),
-            HeaderValue::from_str(token_str.as_str()).unwrap(),
-        );
-        headers.insert(
-            HeaderName::from_lowercase(b"content-type").unwrap(),
-            HeaderValue::from_str("application/json").unwrap(),
-        );
-        headers.insert(
-            HeaderName::from_lowercase(b"version").unwrap(),
-            HeaderValue::from_str("v1").unwrap(),
-        );
+        let path = "/v1/events/publish";
 
         let response = self
             .client
             .post(&format!("{}{}", self.host, path))
-            .headers(headers)
+            .query(&[("token", token_str)])
+            .header(header::CONTENT_TYPE, "application/json")
             .json(&event_model)
             .send()
             .await;
