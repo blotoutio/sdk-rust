@@ -29,7 +29,7 @@
         const char* bundleID = "com.blotout.rustsaleDemoApp";
         blotout::BlotoutAnalytics object = blotout::BlotoutAnalytics();
         object.initSDK(token, endPoint, bundleID);
-        //bo_sdk_init(token, endPoint, bundleID);
+        //bo_init(token, endPoint, bundleID);
         
     });
 }

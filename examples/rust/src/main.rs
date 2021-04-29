@@ -1,7 +1,7 @@
 use blotout::bo_log_event;
 use blotout::bo_log_phi_event;
 use blotout::bo_log_pii_event;
-use blotout::bo_sdk_init;
+use blotout::bo_init;
 use blotout::bo_log_enabled;
 
 const TOKEN: &str = "7T3VGKRTMZND4Q9"; // Application key
@@ -18,7 +18,7 @@ async fn main() {
       Initialize sdk with data that we generated in
       Application section on Blotout Dashboard
     */
-    bo_sdk_init(
+    bo_init(
         TOKEN.to_string(),
         END_POINT.to_string(),
     )

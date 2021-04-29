@@ -6,7 +6,7 @@ namespace RustCSharp
     class Program
     {
         [DllImport("blotout.dll", EntryPoint = "bo_session_end")] private static extern void bo_session_end();
-        [DllImport("blotout.dll", EntryPoint = "bo_sdk_init")] private static extern void bo_sdk_init(string token, string sdk_end_point);
+        [DllImport("blotout.dll", EntryPoint = "bo_init")] private static extern void bo_init(string token, string sdk_end_point);
         [DllImport("blotout.dll", EntryPoint = "bo_log_event")] private static extern void bo_log_event(string event_name, string json_string);
         [DllImport("blotout.dll", EntryPoint = "bo_log_pii_event")] private static extern void bo_log_pii_event(string event_name, string json_string);
         [DllImport("blotout.dll", EntryPoint = "bo_log_phi_event")] private static extern void bo_log_phi_event(string event_name, string json_string);
@@ -28,7 +28,7 @@ namespace RustCSharp
             string endPoint = "http://stage.blotout.io";
             string bundleID = "com.blotout.rustsaleDemoApp";
             //bo_log_enabled(true);
-            bo_sdk_init(token, endPoint, bundleID);
+            bo_init(token, endPoint, bundleID);
         }
 
         private static void TestPublishEvents()

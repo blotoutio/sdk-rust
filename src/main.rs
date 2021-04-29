@@ -14,7 +14,7 @@ const BO_MAP_PROVIDER: &str = "map_provider";
 async fn main() {
     bo_log_enabled(true);
 
-    bo_sdk_init(
+    bo_init(
         "7T3VGKRTMZND4Q9".to_string(),
         "http://stage.blotout.io/sdk".to_string(),
     )
@@ -38,18 +38,11 @@ async fn main() {
     bo_log_phi_event("PHI Event".to_string(), phi_data).await;
 }
 
-fn bo_log_enabled(log_enabled: bool) {
+async fn bo_init(token: String, endpoint_url: String) -> bool {
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
-        .set_log_enabled(log_enabled);
-}
-
-async fn bo_sdk_init(token: String, end_point: String) -> bool {
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
-        .set_base_url(end_point.to_string());
+        .set_base_url(endpoint_url.to_string());
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
@@ -57,7 +50,7 @@ async fn bo_sdk_init(token: String, end_point: String) -> bool {
 
     BOSYSTEMINFOINSTANCE.lock().unwrap().init_system_info();
 
-    let client = BoHttpClient::new(reqwest::Client::new(), end_point.to_owned());
+    let client = BoHttpClient::new(reqwest::Client::new(), endpoint_url.to_owned());
     let response = client.get_manifest().await;
 
     if response.is_ok() {
@@ -121,4 +114,11 @@ pub async fn bo_map_id(id: String, provider: String, data: String) -> bool {
 
     let response = client.send_event(BO_MAP_ID, payload, BO_EVENT_MAP_ID).await;
     response.is_ok()
+}
+
+fn bo_log_enabled(log_enabled: bool) {
+    BOSHAREDINSTANCE
+        .lock()
+        .unwrap()
+        .set_log_enabled(log_enabled);
 }

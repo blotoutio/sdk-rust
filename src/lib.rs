@@ -14,18 +14,11 @@ const BO_EVENT_MAP_ID: u64 = 21001;
 const BO_MAP_ID: &str = "map_id";
 const BO_MAP_PROVIDER: &str = "map_provider";
 
-pub fn bo_log_enabled(log_enabled: bool) {
+pub async fn bo_init(token: String, endpoint_url: String) -> bool {
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
-        .set_log_enabled(log_enabled);
-}
-
-pub async fn bo_sdk_init(token: String, end_point: String) -> bool {
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
-        .set_base_url(end_point.to_string());
+        .set_base_url(endpoint_url.to_string());
     BOSHAREDINSTANCE
         .lock()
         .unwrap()
@@ -33,7 +26,7 @@ pub async fn bo_sdk_init(token: String, end_point: String) -> bool {
 
     BOSYSTEMINFOINSTANCE.lock().unwrap().init_system_info();
 
-    let client = BoHttpClient::new(reqwest::Client::new(), end_point.to_owned());
+    let client = BoHttpClient::new(reqwest::Client::new(), endpoint_url.to_owned());
     let response = client.get_manifest().await;
 
     if response.is_ok() {
@@ -98,4 +91,11 @@ pub async fn bo_map_id(id: String, provider: String, data: String) -> bool {
 
     let response = client.send_event(BO_MAP_ID, payload, BO_EVENT_MAP_ID).await;
     response.is_ok()
+}
+
+pub fn bo_log_enabled(log_enabled: bool) {
+    BOSHAREDINSTANCE
+        .lock()
+        .unwrap()
+        .set_log_enabled(log_enabled);
 }

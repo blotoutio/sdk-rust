@@ -1,19 +1,19 @@
 # API
 
 ## init
-The `bo_sdk_init` method is used for initializing SDK. This sets all required configurations and also sends system event `sdk_start` which allows it to record user.
+The `bo_init` method is used for initializing SDK. This sets all required configurations and also sends system event `sdk_start` which allows it to record user.
 
 #### Input
-`pub async fn bo_sdk_init(token: String, end_point: String) -> bool`
+`pub async fn bo_init(token: String, endpoint_url: String) -> bool`
 
 |||||
 |---|---|---|---|
 | `token` | `String` | Application token that you can get in your dashboard |
-| `end_point` | `String` | Url where you will be sending data |
+| `endpoint_url` | `String` | Url where you will be sending data |
 
 #### Example
-```js
-bo_sdk_init(
+```rust
+bo_init(
         TOKEN.to_string(),
         END_POINT.to_string(),
     ).await;
@@ -34,7 +34,7 @@ pub async fn bo_log_event(event_name: String, data: String) -> bool
 ```
 
 #### Example
-```js
+```rust
 let mut event_name = "application_started";
 let mut data = r#"{
     "someProperty": "some value"

@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void bo_sdk_init(const char *token, const char *end_point);
+void bo_init(const char *token, const char *end_point);
 
 void bo_log_event(const char *event_name, const char *json_string);
 

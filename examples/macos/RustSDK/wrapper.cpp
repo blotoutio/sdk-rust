@@ -18,7 +18,7 @@ BlotoutAnalytics::~BlotoutAnalytics() {
 }
 
  void BlotoutAnalytics::initSDK(const char* token, const char* end_point) {
-      bo_sdk_init(token, end_point);
+      bo_init(token, end_point);
   }
 
   void BlotoutAnalytics::logEvent(const char* event_name,const char* json_string) {
