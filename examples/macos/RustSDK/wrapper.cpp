@@ -22,7 +22,7 @@ BlotoutAnalytics::~BlotoutAnalytics() {
   }
 
   void BlotoutAnalytics::logEvent(const char* event_name,const char* json_string) {
-      bo_log_event(event_name,json_string);
+      bo_capture(event_name,json_string);
   }
 
 
@@ -40,7 +40,7 @@ BlotoutAnalytics::~BlotoutAnalytics() {
   }
 
 void  BlotoutAnalytics::logEnabled(bool log_enabled) {
-     bo_log_enabled(log_enabled);
+     bo_enable_log(log_enabled);
   }
 
 

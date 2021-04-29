@@ -1,28 +1,20 @@
-use blotout::bo_log_event;
-use blotout::bo_log_phi_event;
-use blotout::bo_log_pii_event;
-use blotout::bo_init;
-use blotout::bo_log_enabled;
+use blotout::{bo_init, bo_capture, bo_capture_personal, bo_map_id, bo_enable_log, bo_get_user_id};
 
 const TOKEN: &str = "7T3VGKRTMZND4Q9"; // Application key
 const END_POINT: &str = "https://stage.blotout.io/sdk"; // <1P Container Domain>
 
 #[tokio::main]
 async fn main() {
-  /*
-    Enable logging
-   */
-  bo_log_enabled(true);
+    /*
+      Enable logging
+     */
+    bo_enable_log(true);
 
-   /*
-      Initialize sdk with data that we generated in
-      Application section on Blotout Dashboard
-    */
-    bo_init(
-        TOKEN.to_string(),
-        END_POINT.to_string(),
-    )
-    .await;
+    /*
+       Initialize sdk with data that we generated in
+       Application section on Blotout Dashboard
+     */
+    bo_init(TOKEN.to_string(), END_POINT.to_string()).await;
 
     /*
        Logging custom events that helps us understand
@@ -32,7 +24,7 @@ async fn main() {
     let mut data = r#"{
         "someProperty": "some value"
     }"#;
-    bo_log_event(event_name.to_string(), data.to_string()).await;
+    bo_capture(event_name.to_string(), data.to_string()).await;
 
     /*
        When user register or fill our form it's good to log this data
@@ -41,10 +33,10 @@ async fn main() {
     */
     event_name = "registration";
     data = r#"{
-        "email id": "user@example.com",
+        "email": "user@example.com",
         "gender": "female"
     }"#;
-    bo_log_pii_event(event_name.to_string(), data.to_string()).await;
+    bo_capture_personal(event_name.to_string(), data.to_string(), false).await;
 
     /*
        If user fills out any data that is related to health and you want to log it,
@@ -57,5 +49,18 @@ async fn main() {
         "email id": "user@example.com",
         "bloodGroup": "A+ve"
     }"#;
-    bo_log_phi_event(event_name.to_string(), data.to_string()).await;
+    bo_capture_personal(event_name.to_string(), data.to_string(), true).await;
+
+    /*
+        Map ID
+     */
+    data = r#"{
+        "someProperty": "some value"
+    }"#;
+    bo_map_id("2f28023hj0-2323-23232".to_string(), "service".to_string(), data.to_string()).await;
+
+    /*
+        Get user ID
+     */
+    println!("User ID: {}", bo_get_user_id());
 }

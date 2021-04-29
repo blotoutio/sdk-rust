@@ -1,18 +1,10 @@
-use blotout::network::event_api::EventApi;
-use blotout::network::event_personal_api::BoEventSecureDataApi;
-use blotout::network::network::BoHttpClient;
-use blotout::network::manifest_api::BoManifestApi;
-use blotout::utility::shared_manager::BOSHAREDINSTANCE;
-use blotout::utility::system_info_manager::BOSYSTEMINFOINSTANCE;
-use serde_json::Value;
-
-const BO_EVENT_MAP_ID: u64 = 21001;
-const BO_MAP_ID: &str = "map_id";
-const BO_MAP_PROVIDER: &str = "map_provider";
+use crate::common::api::{
+    capture, capture_personal, enable_log, enable_sdk, get_user_id, init, map_id,
+};
 
 #[tokio::main]
 async fn main() {
-    bo_log_enabled(true);
+    bo_enable_log(true);
 
     bo_init(
         "7T3VGKRTMZND4Q9".to_string(),
@@ -22,7 +14,7 @@ async fn main() {
 
     let data = "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
         .to_string();
-    bo_log_event("rust_event".to_string(), data).await;
+    bo_capture("rust_event".to_string(), data).await;
 
     let map_data =
         "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
@@ -32,96 +24,38 @@ async fn main() {
 
     let pii_data =
         "{\"email id\": \"ankuradhikari08@gmail.com\", \"gender\": \"male\"}".to_string();
-    bo_log_pii_event("PII Event".to_string(), pii_data).await;
+    bo_capture_personal("PII Event".to_string(), pii_data, false).await;
 
     let phi_data = "{\"email id\": \"ankur@blotout.io\", \"gender\": \"male\"}".to_string();
-    bo_log_phi_event("PHI Event".to_string(), phi_data).await;
+    bo_capture_personal("PHI Event".to_string(), phi_data, true).await;
+
+    bo_end_session().await;
 }
 
-async fn bo_init(token: String, endpoint_url: String) -> bool {
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
-        .set_base_url(endpoint_url.to_string());
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
-        .set_token(token.to_string());
-
-    BOSYSTEMINFOINSTANCE.lock().unwrap().init_system_info();
-
-    let client = BoHttpClient::new(reqwest::Client::new(), endpoint_url.to_owned());
-    let response = client.get_manifest().await;
-
-    if response.is_ok() {
-        let session_response = client.send_session_start().await;
-        println!("{:?}", session_response.is_err());
-        true
-    } else {
-        false
-    }
+pub async fn bo_init(token: String, endpoint_url: String) -> bool {
+    init(token, endpoint_url).await
 }
 
-async fn bo_log_event(event_name: String, data: String) -> bool {
-    let client = BoHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let data: Value = serde_json::from_str(data.as_str()).unwrap();
-    let response = client.send_event(event_name.as_str(), data, 0).await;
-    response.is_ok()
+pub async fn bo_capture(event_name: String, data: String) -> bool {
+    capture(event_name, data).await
 }
 
-async fn bo_log_pii_event(event_name: String, data: String) -> bool {
-    let client = BoHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let data: Value = serde_json::from_str(data.as_str()).unwrap();
-    let response = client.send_pii_event(event_name.as_str(), data).await;
-    response.is_ok()
-}
-
-async fn bo_log_phi_event(event_name: String, data: String) -> bool {
-    let client = BoHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let data: Value = serde_json::from_str(data.as_str()).unwrap();
-    //let data =json!(data);
-    let response = client.send_phi_event(event_name.as_str(), data).await;
-    response.is_ok()
+pub async fn bo_capture_personal(event_name: String, data: String, is_phi: bool) -> bool {
+    capture_personal(event_name, data, is_phi).await
 }
 
 pub async fn bo_map_id(external_id: String, provider: String, data: String) -> bool {
-    let client = BoHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let data: Value = serde_json::from_str(data.as_str()).unwrap();
-    let mut map_object = data.as_object().unwrap().clone();
-    map_object.insert(
-        BO_MAP_ID.to_string(),
-        serde_json::Value::String(external_id),
-    );
-    map_object.insert(
-        BO_MAP_PROVIDER.to_string(),
-        serde_json::Value::String(provider),
-    );
-
-    let payload: Value = Value::Object(map_object);
-
-    let response = client.send_event(BO_MAP_ID, payload, BO_EVENT_MAP_ID).await;
-    response.is_ok()
+    map_id(external_id, provider, data)
 }
 
-fn bo_log_enabled(log_enabled: bool) {
-    BOSHAREDINSTANCE
-        .lock()
-        .unwrap()
-        .set_log_enabled(log_enabled);
+pub fn bo_enable_log(enable: bool) {
+    enable_log(enable)
+}
+
+pub fn bo_get_user_id() -> String {
+    get_user_id()
+}
+
+pub fn bo_enable(enable: bool) {
+    enable_sdk(enable)
 }

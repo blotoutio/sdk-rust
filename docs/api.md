@@ -20,7 +20,7 @@ bo_init(
 ```
 
 ## capture events
-The `bo_log_event` method is used to record developer events. This allows you to send custom events to the server when a user is interacting with the app. For example, one custom event would be when a user adds an item to a cart.
+The `bo_capture` method is used to record developer events. This allows you to send custom events to the server when a user is interacting with the app. For example, one custom event would be when a user adds an item to a cart.
 
 ## Non-Timed Events
 Non-Timed events are generally events which are not time bound and do not contain duration information. For example, the Home Page loaded is non-timed but Home page loading started and home page loading ended, when grouped together, can be a timed event.
@@ -30,7 +30,7 @@ These events are categorized under two main categories in Blotout’s SDK.
 Developer Events are those which developers codify in the Application code with the help of Blotout’s SDK and SDK sync with Blotout’s server, like “iPhone added to cart“.
 
 ```html
-pub async fn bo_log_event(event_name: String, data: String) -> bool
+pub async fn bo_capture(event_name: String, data: String) -> bool
 ```
 
 #### Example
@@ -39,7 +39,7 @@ let mut event_name = "application_started";
 let mut data = r#"{
     "someProperty": "some value"
 }"#;
-bo_log_event(event_name.to_string(), data.to_string()).await;
+bo_capture(event_name.to_string(), data.to_string()).await;
 ```
 
 ## PII & PHI Events

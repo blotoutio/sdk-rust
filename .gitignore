@@ -13,5 +13,5 @@ Cargo.lock
 .idea
 .DS_Store
 .vscode
-**/BOAnalyticsRootUserId.txt
+BOAnalytics.txt
 xcuserdata
