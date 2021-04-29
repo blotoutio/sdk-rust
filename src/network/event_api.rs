@@ -1,11 +1,11 @@
-use crate::model::boeventmodel::BoEvent;
-use crate::model::boeventmodel::BoEventModel;
+use crate::model::event::BoEvent;
+use crate::model::event::BoEventModel;
 use async_trait::async_trait;
 use failure::Error;
 use serde_json::Value;
 
 #[async_trait]
-pub trait BoEventApi {
+pub trait EventApi {
     /// Send a single message to Blotout.
     async fn send_event(
         &self,

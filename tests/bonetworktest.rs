@@ -1,10 +1,10 @@
-use blotout::model::bomanifestmodel::BoManifestVariable;
-use blotout::network::boeventapi::BoEventApi;
-use blotout::network::boeventsecuredataapi::BoEventSecureDataApi;
+use blotout::model::bomanifestmodel::ManifestVariable;
+use blotout::network::event_api::EventApi;
+use blotout::network::event_personal_api::BoEventSecureDataApi;
 use blotout::network::bohttp::BoHttpClient;
-use blotout::network::bomanifestapi::BoManifestApi;
-use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
-use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
+use blotout::network::manifest_api::BoManifestApi;
+use blotout::utility::shared_manager::BOSHAREDINSTANCE;
+use blotout::utility::system_info_manager::BOSYSTEMINFOINSTANCE;
 use serde_json::Value;
 
 #[test]
@@ -136,7 +136,7 @@ fn test_get_manifest_variable() {
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
 
-    let pii_manifest_variable: BoManifestVariable =
+    let pii_manifest_variable: ManifestVariable =
         client.get_manifest_variable("PII_Public_Key".to_string());
 
     assert!(Some(pii_manifest_variable).is_some());

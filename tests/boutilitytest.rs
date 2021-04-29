@@ -1,8 +1,8 @@
-use blotout::utility::bocommonutility::BOSHAREDCOMMONUTILITYINSTANCE;
+use blotout::utility::common_utility::BOSHAREDCOMMONUTILITYINSTANCE;
 use blotout::utility::boerror::BoError;
-use blotout::utility::bofilemanager::BOSHAREDFILEINSTANCE;
-use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
-use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
+use blotout::utility::file_manager::BOSHAREDFILEINSTANCE;
+use blotout::utility::shared_manager::BOSHAREDINSTANCE;
+use blotout::utility::system_info_manager::BOSYSTEMINFOINSTANCE;
 use serde_json::json;
 
 #[test]

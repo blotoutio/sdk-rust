@@ -1,5 +1,5 @@
-use crate::model::boeventmodel::BoEventSecureDataModel;
-use crate::model::bomanifestmodel::BoManifestVariable;
+use crate::model::event::BoEventSecureDataModel;
+use crate::model::manifest::ManifestVariable;
 use async_trait::async_trait;
 use failure::Error;
 use serde_json::Value;
@@ -14,7 +14,7 @@ pub trait BoEventSecureDataApi {
     async fn send_phi_event(&self, event_name: &str, event_info: Value) -> Result<(), Error>;
 
     //return manifest variable based on name
-    fn get_manifest_variable(&self, manifest_var_name: String) -> BoManifestVariable;
+    fn get_manifest_variable(&self, manifest_var_name: String) -> ManifestVariable;
 
     //publih secure events to server
     async fn publish_secure_events(&self, event_model: BoEventSecureDataModel)

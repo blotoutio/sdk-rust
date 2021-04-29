@@ -1,2 +1,2 @@
-pub mod boeventmodel;
-pub mod bomanifestmodel;
+pub mod event;
+pub mod manifest;

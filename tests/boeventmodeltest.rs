@@ -3,9 +3,9 @@ use blotout::model::boeventmodel::BoEventModel;
 use blotout::model::boeventmodel::BoEventSecureDataModel;
 use blotout::model::boeventmodel::BoMeta;
 use blotout::model::boeventmodel::BoSecureData;
-use blotout::model::bomanifestmodel::BoManifestRoot;
-use blotout::model::bomanifestmodel::BoManifestVariable;
-use blotout::utility::bosysteminfomanager::BoSystemInfoManager;
+use blotout::model::bomanifestmodel::ManifestRoot;
+use blotout::model::bomanifestmodel::ManifestVariable;
+use blotout::utility::system_info_manager::SystemInfoManager;
 #[test]
 fn test_event_model() {
     let events_arr: Vec<BoEvent> = Vec::new();
@@ -44,7 +44,7 @@ fn test_event() {
 
 #[test]
 fn test_manifest_root() {
-    let manifest_root = BoManifestRoot {
+    let manifest_root = ManifestRoot {
         ..Default::default()
     };
     assert!(Some(manifest_root).is_some());
@@ -52,7 +52,7 @@ fn test_manifest_root() {
 
 #[test]
 fn test_manifest_variable() {
-    let manifest_variable = BoManifestVariable {
+    let manifest_variable = ManifestVariable {
         ..Default::default()
     };
     assert!(Some(manifest_variable).is_some());
@@ -60,7 +60,7 @@ fn test_manifest_variable() {
 
 #[test]
 fn test_system_info_manager() {
-    let system_info_manager = BoSystemInfoManager {
+    let system_info_manager = SystemInfoManager {
         ..Default::default()
     };
     assert!(Some(system_info_manager).is_some());

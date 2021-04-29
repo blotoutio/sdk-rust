@@ -2,12 +2,12 @@ pub mod model;
 pub mod network;
 pub mod utility;
 
-use crate::network::boeventapi::BoEventApi;
-use crate::network::boeventsecuredataapi::BoEventSecureDataApi;
-use crate::network::bohttp::BoHttpClient;
-use crate::network::bomanifestapi::BoManifestApi;
-use crate::utility::bosharedmanager::BOSHAREDINSTANCE;
-use crate::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
+use crate::network::event_api::EventApi;
+use crate::network::event_personal_api::BoEventSecureDataApi;
+use crate::network::network::BoHttpClient;
+use crate::network::manifest_api::BoManifestApi;
+use crate::utility::shared_manager::BOSHAREDINSTANCE;
+use crate::utility::system_info_manager::BOSYSTEMINFOINSTANCE;
 use serde_json::Value;
 
 const BO_EVENT_MAP_ID: u64 = 21001;
@@ -81,7 +81,10 @@ pub async fn bo_map_id(external_id: String, provider: String, data: String) -> b
 
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
     let mut map_object = data.as_object().unwrap().clone();
-    map_object.insert(BO_MAP_ID.to_string(), serde_json::Value::String(external_id));
+    map_object.insert(
+        BO_MAP_ID.to_string(),
+        serde_json::Value::String(external_id),
+    );
     map_object.insert(
         BO_MAP_PROVIDER.to_string(),
         serde_json::Value::String(provider),

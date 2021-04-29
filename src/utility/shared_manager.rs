@@ -1,11 +1,11 @@
-use crate::model::bomanifestmodel::BoManifestRoot;
+use crate::model::manifest::ManifestRoot;
 use chrono::Utc;
 use lazy_static::lazy_static; // 1.4.0
 use std::sync::Mutex;
 
 #[derive(Default)]
-pub struct BoSharedManager {
-    pub manifest: BoManifestRoot,
+pub struct SharedManager {
+    pub manifest: ManifestRoot,
     pub token: String,
     pub base_url: String,
     pub log_enabled: bool,
@@ -14,8 +14,8 @@ pub struct BoSharedManager {
     pub session_id: String,
 }
 
-impl BoSharedManager {
-    pub fn set_manifest(&mut self, newmanifest: BoManifestRoot) {
+impl SharedManager {
+    pub fn set_manifest(&mut self, newmanifest: ManifestRoot) {
         self.manifest = newmanifest;
     }
 
@@ -45,7 +45,7 @@ impl BoSharedManager {
 }
 
 lazy_static! {
-    pub static ref BOSHAREDINSTANCE: Mutex<BoSharedManager> = Mutex::new(BoSharedManager {
+    pub static ref BOSHAREDINSTANCE: Mutex<SharedManager> = Mutex::new(SharedManager {
         session_id: Utc::now().timestamp_millis().to_string(),
         ..Default::default()
     });

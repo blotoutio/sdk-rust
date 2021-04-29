@@ -1,5 +1,5 @@
-use crate::utility::bocommonutility::BOSHAREDCOMMONUTILITYINSTANCE;
-use crate::utility::bosharedmanager::BOSHAREDINSTANCE;
+use crate::utility::common_utility::BOSHAREDCOMMONUTILITYINSTANCE;
+use crate::utility::shared_manager::BOSHAREDINSTANCE;
 use lazy_static::lazy_static; // 1.4.0
 use rand::prelude::*;
 use std::fs;

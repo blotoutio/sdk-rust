@@ -1,9 +1,9 @@
-use blotout::network::boeventapi::BoEventApi;
-use blotout::network::boeventsecuredataapi::BoEventSecureDataApi;
-use blotout::network::bohttp::BoHttpClient;
-use blotout::network::bomanifestapi::BoManifestApi;
-use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
-use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
+use blotout::network::event_api::EventApi;
+use blotout::network::event_personal_api::BoEventSecureDataApi;
+use blotout::network::network::BoHttpClient;
+use blotout::network::manifest_api::BoManifestApi;
+use blotout::utility::shared_manager::BOSHAREDINSTANCE;
+use blotout::utility::system_info_manager::BOSYSTEMINFOINSTANCE;
 use serde_json::Value;
 
 const BO_EVENT_MAP_ID: u64 = 21001;
@@ -104,7 +104,10 @@ pub async fn bo_map_id(external_id: String, provider: String, data: String) -> b
 
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
     let mut map_object = data.as_object().unwrap().clone();
-    map_object.insert(BO_MAP_ID.to_string(), serde_json::Value::String(external_id));
+    map_object.insert(
+        BO_MAP_ID.to_string(),
+        serde_json::Value::String(external_id),
+    );
     map_object.insert(
         BO_MAP_PROVIDER.to_string(),
         serde_json::Value::String(provider),

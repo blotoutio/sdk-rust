@@ -15,14 +15,14 @@ use rsa::{PaddingScheme, PublicKey, RSAPublicKey};
 const BO_CUSTOM_CODE: u64 = 21100;
 
 #[derive(Default)]
-pub struct BoCommonUtility {}
+pub struct CommonUtility {}
 
 lazy_static! {
-    pub static ref BOSHAREDCOMMONUTILITYINSTANCE: Mutex<BoCommonUtility> =
-        Mutex::new(BoCommonUtility::default());
+    pub static ref BOSHAREDCOMMONUTILITYINSTANCE: Mutex<CommonUtility> =
+        Mutex::new(CommonUtility::default());
 }
 
-impl BoCommonUtility {
+impl CommonUtility {
     //get unique device id
     pub fn get_device_id(&self) -> String {
         let mut owned_string: String = Utc::now().timestamp_millis().to_string();

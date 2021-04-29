@@ -1,18 +1,18 @@
-use crate::model::boeventmodel::BoEvent;
-use crate::model::boeventmodel::BoEventModel;
-use crate::model::boeventmodel::BoEventSecureDataModel;
-use crate::model::boeventmodel::BoMeta;
-use crate::model::boeventmodel::BoPropertiesInfo;
-use crate::model::boeventmodel::BoSecureData;
-use crate::model::bomanifestmodel::BoManifestRoot;
-use crate::model::bomanifestmodel::BoManifestVariable;
-use crate::network::boeventapi::BoEventApi;
-use crate::network::boeventsecuredataapi::BoEventSecureDataApi;
-use crate::network::bomanifestapi::BoManifestApi;
-use crate::utility::bocommonutility::BOSHAREDCOMMONUTILITYINSTANCE;
-use crate::utility::bofilemanager::BOSHAREDFILEINSTANCE;
-use crate::utility::bosharedmanager::BOSHAREDINSTANCE;
-use crate::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
+use crate::model::event::BoEvent;
+use crate::model::event::BoEventModel;
+use crate::model::event::BoEventSecureDataModel;
+use crate::model::event::BoMeta;
+use crate::model::event::BoPropertiesInfo;
+use crate::model::event::BoSecureData;
+use crate::model::manifest::ManifestRoot;
+use crate::model::manifest::ManifestVariable;
+use crate::network::event_api::EventApi;
+use crate::network::event_personal_api::BoEventSecureDataApi;
+use crate::network::manifest_api::BoManifestApi;
+use crate::utility::common_utility::BOSHAREDCOMMONUTILITYINSTANCE;
+use crate::utility::file_manager::BOSHAREDFILEINSTANCE;
+use crate::utility::shared_manager::BOSHAREDINSTANCE;
+use crate::utility::system_info_manager::BOSYSTEMINFOINSTANCE;
 use async_trait::async_trait;
 use chrono::Utc;
 use failure::Error;
@@ -58,7 +58,7 @@ impl BoManifestApi for BoHttpClient {
             .header(header::CONTENT_TYPE, "application/json")
             .send()
             .await?
-            .json::<BoManifestRoot>()
+            .json::<ManifestRoot>()
             .await?;
 
         BOSHAREDINSTANCE
@@ -75,7 +75,7 @@ impl BoManifestApi for BoHttpClient {
 }
 
 #[async_trait]
-impl BoEventApi for BoHttpClient {
+impl EventApi for BoHttpClient {
     async fn send_event(
         &self,
         event_name: &str,
@@ -205,8 +205,8 @@ impl BoEventApi for BoHttpClient {
 
 #[async_trait]
 impl BoEventSecureDataApi for BoHttpClient {
-    fn get_manifest_variable(&self, manifest_var_name: String) -> BoManifestVariable {
-        let manifest: BoManifestRoot = BOSHAREDINSTANCE.lock().unwrap().manifest.to_owned();
+    fn get_manifest_variable(&self, manifest_var_name: String) -> ManifestVariable {
+        let manifest: ManifestRoot = BOSHAREDINSTANCE.lock().unwrap().manifest.to_owned();
 
         for manifest_var in manifest.variables {
             if manifest_var.variable_name.eq(manifest_var_name.as_str()) {
@@ -214,7 +214,7 @@ impl BoEventSecureDataApi for BoHttpClient {
             }
         }
 
-        BoManifestVariable::default()
+        ManifestVariable::default()
     }
 
     async fn send_pii_event(&self, event_name: &str, event_info: Value) -> Result<(), Error> {
@@ -257,7 +257,7 @@ impl BoEventSecureDataApi for BoHttpClient {
         let encrypted_string = base64::encode(encrypted_data.unwrap());
 
         //RSA key encryption
-        let pii_manifest_variable: BoManifestVariable =
+        let pii_manifest_variable: ManifestVariable =
             self.get_manifest_variable("PII_Public_Key".to_string());
         let encrypted_rsa_key = BOSHAREDCOMMONUTILITYINSTANCE
             .lock()
@@ -366,7 +366,7 @@ impl BoEventSecureDataApi for BoHttpClient {
         let encrypted_string = base64::encode(encrypted_data.unwrap()); // String::from_utf8(encrypted_data.unwrap());
 
         //RSA key encryption
-        let phi_manifest_variable: BoManifestVariable =
+        let phi_manifest_variable: ManifestVariable =
             self.get_manifest_variable("PHI_Public_Key".to_string());
         let encrypted_rsa_key = BOSHAREDCOMMONUTILITYINSTANCE
             .lock()
