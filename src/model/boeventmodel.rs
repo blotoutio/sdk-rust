@@ -2,27 +2,27 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BOEventModel {
-    pub meta: BOMeta,
-    pub events: Vec<BOEvent>,
+pub struct BoEventModel {
+    pub meta: BoMeta,
+    pub events: Vec<BoEvent>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BOEventSecureDataModel {
-    pub meta: BOMeta,
-    pub pii: BOSecureData,
-    pub phi: BOSecureData,
+pub struct BoEventSecureDataModel {
+    pub meta: BoMeta,
+    pub pii: BoSecureData,
+    pub phi: BoSecureData,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BOSecureData {
+pub struct BoSecureData {
     pub key: String,
     pub data: String,
     pub iv: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BOMeta {
+pub struct BoMeta {
     pub plf: i64,
     pub osn: String,
     pub sdkv: String,
@@ -30,7 +30,7 @@ pub struct BOMeta {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BOEvent {
+pub struct BoEvent {
     pub appb: i64,
     pub mid: String,
     pub id: String,
@@ -42,7 +42,7 @@ pub struct BOEvent {
     pub value: String,
     pub scrn: String,
     pub evt: i64,
-    pub properties: BOPropertiesInfo,
+    pub properties: BoPropertiesInfo,
     pub nvg_tm: Vec<f64>,
     pub tst: i64,
     pub nvg: Vec<String>,
@@ -50,7 +50,7 @@ pub struct BOEvent {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BOPropertiesInfo {
+pub struct BoPropertiesInfo {
     #[serde(rename = "codifiedInfo")]
     pub codified_info: Value,
     pub session_id: String,

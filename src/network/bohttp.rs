@@ -1,14 +1,14 @@
-use crate::model::boeventmodel::BOEvent;
-use crate::model::boeventmodel::BOEventModel;
-use crate::model::boeventmodel::BOEventSecureDataModel;
-use crate::model::boeventmodel::BOMeta;
-use crate::model::boeventmodel::BOPropertiesInfo;
-use crate::model::boeventmodel::BOSecureData;
-use crate::model::bomanifestmodel::BOManifestRoot;
-use crate::model::bomanifestmodel::BOManifestVariable;
-use crate::network::boeventapi::BOEventAPI;
-use crate::network::boeventsecuredataapi::BOEventSecureDataAPI;
-use crate::network::bomanifestapi::BOManifestAPI;
+use crate::model::boeventmodel::BoEvent;
+use crate::model::boeventmodel::BoEventModel;
+use crate::model::boeventmodel::BoEventSecureDataModel;
+use crate::model::boeventmodel::BoMeta;
+use crate::model::boeventmodel::BoPropertiesInfo;
+use crate::model::boeventmodel::BoSecureData;
+use crate::model::bomanifestmodel::BoManifestRoot;
+use crate::model::bomanifestmodel::BoManifestVariable;
+use crate::network::boeventapi::BoEventApi;
+use crate::network::boeventsecuredataapi::BoEventSecureDataApi;
+use crate::network::bomanifestapi::BoManifestApi;
 use crate::utility::bocommonutility::BOSHAREDCOMMONUTILITYINSTANCE;
 use crate::utility::bofilemanager::BOSHAREDFILEINSTANCE;
 use crate::utility::bosharedmanager::BOSHAREDINSTANCE;
@@ -24,29 +24,29 @@ const BO_CRYPTO_IV: &str = "Q0BG17E2819IWZYQ";
 const BO_EVENT_SDK_START: u64 = 11130;
 const BO_SDK_START: &str = "sdk_start";
 
-pub struct BOHttpClient {
+pub struct BoHttpClient {
     client: reqwest::Client,
     host: String,
 }
 
-impl Default for BOHttpClient {
+impl Default for BoHttpClient {
     fn default() -> Self {
-        BOHttpClient {
+        BoHttpClient {
             client: reqwest::Client::builder().build().unwrap(),
             host: "".to_owned(),
         }
     }
 }
 
-impl BOHttpClient {
+impl BoHttpClient {
     /// Construct a new `HttpClient` from a `reqwest::Client`
-    pub fn new(client: reqwest::Client, host: String) -> BOHttpClient {
-        BOHttpClient { client, host }
+    pub fn new(client: reqwest::Client, host: String) -> BoHttpClient {
+        BoHttpClient { client, host }
     }
 }
 
 #[async_trait]
-impl BOManifestAPI for BOHttpClient {
+impl BoManifestApi for BoHttpClient {
     async fn get_manifest(&self) -> Result<(), Error> {
         let token_str = BOSHAREDINSTANCE.lock().unwrap().token.to_string();
         let path = "/v1/manifest/pull";
@@ -58,7 +58,7 @@ impl BOManifestAPI for BOHttpClient {
             .header(header::CONTENT_TYPE, "application/json")
             .send()
             .await?
-            .json::<BOManifestRoot>()
+            .json::<BoManifestRoot>()
             .await?;
 
         BOSHAREDINSTANCE
@@ -75,7 +75,7 @@ impl BOManifestAPI for BOHttpClient {
 }
 
 #[async_trait]
-impl BOEventAPI for BOHttpClient {
+impl BoEventApi for BoHttpClient {
     async fn send_event(
         &self,
         event_name: &str,
@@ -95,13 +95,13 @@ impl BOEventAPI for BOHttpClient {
                 .code_for_custom_codified_event(event_name.to_string());
         }
 
-        let mut events_arr: Vec<BOEvent> = Vec::new();
-        let event_properties = BOPropertiesInfo {
+        let mut events_arr: Vec<BoEvent> = Vec::new();
+        let event_properties = BoPropertiesInfo {
             codified_info: event_info,
             session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
         };
 
-        let event_model = BOEvent {
+        let event_model = BoEvent {
             evn: event_name.to_string(),
             properties: event_properties,
             evcs: event_sub_code,
@@ -131,13 +131,13 @@ impl BOEventAPI for BOHttpClient {
             return Ok(());
         }
 
-        let mut events_arr: Vec<BOEvent> = Vec::new();
-        let event_properties = BOPropertiesInfo {
+        let mut events_arr: Vec<BoEvent> = Vec::new();
+        let event_properties = BoPropertiesInfo {
             session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
             ..Default::default()
         };
 
-        let event_model = BOEvent {
+        let event_model = BoEvent {
             evn: BO_SDK_START.to_string(),
             evcs: BO_EVENT_SDK_START,
             evt: Utc::now().timestamp_millis(),
@@ -162,12 +162,12 @@ impl BOEventAPI for BOHttpClient {
         response
     }
 
-    fn get_payload(&self, events_arr: Vec<BOEvent>) -> BOEventModel {
+    fn get_payload(&self, events_arr: Vec<BoEvent>) -> BoEventModel {
         let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
         let sdk_version = env!("CARGO_PKG_VERSION").to_string();
 
-        let event_model = BOEventModel {
-            meta: BOMeta {
+        let event_model = BoEventModel {
+            meta: BoMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
                 sdkv: sdk_version,
@@ -182,7 +182,7 @@ impl BOEventAPI for BOHttpClient {
         event_model
     }
 
-    async fn publish_events(&self, event_model: BOEventModel) -> Result<(), Error> {
+    async fn publish_events(&self, event_model: BoEventModel) -> Result<(), Error> {
         let token_str = BOSHAREDINSTANCE.lock().unwrap().token.to_string();
         let path = "/v1/events/publish";
 
@@ -204,9 +204,9 @@ impl BOEventAPI for BOHttpClient {
 }
 
 #[async_trait]
-impl BOEventSecureDataAPI for BOHttpClient {
-    fn get_manifest_variable(&self, manifest_var_name: String) -> BOManifestVariable {
-        let manifest: BOManifestRoot = BOSHAREDINSTANCE.lock().unwrap().manifest.to_owned();
+impl BoEventSecureDataApi for BoHttpClient {
+    fn get_manifest_variable(&self, manifest_var_name: String) -> BoManifestVariable {
+        let manifest: BoManifestRoot = BOSHAREDINSTANCE.lock().unwrap().manifest.to_owned();
 
         for manifest_var in manifest.variables {
             if manifest_var.variable_name.eq(manifest_var_name.as_str()) {
@@ -214,7 +214,7 @@ impl BOEventSecureDataAPI for BOHttpClient {
             }
         }
 
-        BOManifestVariable::default()
+        BoManifestVariable::default()
     }
 
     async fn send_pii_event(&self, event_name: &str, event_info: Value) -> Result<(), Error> {
@@ -222,13 +222,13 @@ impl BOEventSecureDataAPI for BOHttpClient {
             return Ok(());
         }
 
-        let mut events_arr: Vec<BOEvent> = Vec::new();
-        let event_properties = BOPropertiesInfo {
+        let mut events_arr: Vec<BoEvent> = Vec::new();
+        let event_properties = BoPropertiesInfo {
             codified_info: event_info,
             session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
         };
 
-        let event_model = BOEvent {
+        let event_model = BoEvent {
             evn: event_name.to_string(),
             properties: event_properties,
             evcs: BOSHAREDCOMMONUTILITYINSTANCE
@@ -257,7 +257,7 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let encrypted_string = base64::encode(encrypted_data.unwrap());
 
         //RSA key encryption
-        let pii_manifest_variable: BOManifestVariable =
+        let pii_manifest_variable: BoManifestVariable =
             self.get_manifest_variable("PII_Public_Key".to_string());
         let encrypted_rsa_key = BOSHAREDCOMMONUTILITYINSTANCE
             .lock()
@@ -268,8 +268,8 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
         let sdk_version = env!("CARGO_PKG_VERSION").to_string();
 
-        let event_data_model = BOEventSecureDataModel {
-            meta: BOMeta {
+        let event_data_model = BoEventSecureDataModel {
+            meta: BoMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
                 sdkv: sdk_version,
@@ -278,12 +278,12 @@ impl BOEventSecureDataAPI for BOHttpClient {
                     .unwrap()
                     .get_timezone_offset(),
             },
-            pii: BOSecureData {
+            pii: BoSecureData {
                 key: encrypted_rsa_key,
                 data: encrypted_string,
                 ..Default::default()
             },
-            phi: BOSecureData {
+            phi: BoSecureData {
                 ..Default::default()
             },
         };
@@ -302,7 +302,7 @@ impl BOEventSecureDataAPI for BOHttpClient {
 
     async fn publish_secure_events(
         &self,
-        event_model: BOEventSecureDataModel,
+        event_model: BoEventSecureDataModel,
     ) -> Result<(), Error> {
         let token_str = BOSHAREDINSTANCE.lock().unwrap().token.to_string();
         let path = "/v1/events/publish";
@@ -331,13 +331,13 @@ impl BOEventSecureDataAPI for BOHttpClient {
             return Ok(());
         }
 
-        let mut events_arr: Vec<BOEvent> = Vec::new();
-        let event_properties = BOPropertiesInfo {
+        let mut events_arr: Vec<BoEvent> = Vec::new();
+        let event_properties = BoPropertiesInfo {
             codified_info: event_info,
             session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
         };
 
-        let event_model = BOEvent {
+        let event_model = BoEvent {
             evn: event_name.to_string(),
             properties: event_properties,
             evcs: BOSHAREDCOMMONUTILITYINSTANCE
@@ -366,7 +366,7 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let encrypted_string = base64::encode(encrypted_data.unwrap()); // String::from_utf8(encrypted_data.unwrap());
 
         //RSA key encryption
-        let phi_manifest_variable: BOManifestVariable =
+        let phi_manifest_variable: BoManifestVariable =
             self.get_manifest_variable("PHI_Public_Key".to_string());
         let encrypted_rsa_key = BOSHAREDCOMMONUTILITYINSTANCE
             .lock()
@@ -377,8 +377,8 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
         let sdk_version = env!("CARGO_PKG_VERSION").to_string();
 
-        let event_data_model = BOEventSecureDataModel {
-            meta: BOMeta {
+        let event_data_model = BoEventSecureDataModel {
+            meta: BoMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
                 sdkv: sdk_version,
@@ -387,12 +387,12 @@ impl BOEventSecureDataAPI for BOHttpClient {
                     .unwrap()
                     .get_timezone_offset(),
             },
-            phi: BOSecureData {
+            phi: BoSecureData {
                 key: encrypted_rsa_key,
                 data: encrypted_string,
                 ..Default::default()
             },
-            pii: BOSecureData {
+            pii: BoSecureData {
                 ..Default::default()
             },
         };

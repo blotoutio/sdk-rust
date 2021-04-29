@@ -12,16 +12,16 @@ const BO_ANALYTICS_ROOT_USER_ID: &str = "BOAnalyticsRootUserId.txt";
 const BO_ANALYTICS_ROOT_TEST: &str = "BOAnalyticsRootTest.txt";
 
 #[derive(Default)]
-pub struct BOFileManager {
+pub struct BoFileManager {
     pub user_id: String,
 }
 
 lazy_static! {
-    pub static ref BOSHAREDFILEINSTANCE: Mutex<BOFileManager> =
-        Mutex::new(BOFileManager::default());
+    pub static ref BOSHAREDFILEINSTANCE: Mutex<BoFileManager> =
+        Mutex::new(BoFileManager::default());
 }
 
-impl BOFileManager {
+impl BoFileManager {
     pub fn check_file_permission(&self) -> bool {
         let path = Path::new(BO_ANALYTICS_ROOT_TEST);
 

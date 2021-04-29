@@ -1,17 +1,16 @@
-use blotout::model::boeventmodel::BOEvent;
-use blotout::model::boeventmodel::BOEventModel;
-use blotout::model::boeventmodel::BOEventSecureDataModel;
-use blotout::model::boeventmodel::BOMeta;
-use blotout::model::boeventmodel::BOSecureData;
-use blotout::model::boeventmodel::BOSessionInfo;
-use blotout::model::bomanifestmodel::BOManifestRoot;
-use blotout::model::bomanifestmodel::BOManifestVariable;
-use blotout::utility::bosysteminfomanager::BOSystemInfoManager;
+use blotout::model::boeventmodel::BoEvent;
+use blotout::model::boeventmodel::BoEventModel;
+use blotout::model::boeventmodel::BoEventSecureDataModel;
+use blotout::model::boeventmodel::BoMeta;
+use blotout::model::boeventmodel::BoSecureData;
+use blotout::model::bomanifestmodel::BoManifestRoot;
+use blotout::model::bomanifestmodel::BoManifestVariable;
+use blotout::utility::bosysteminfomanager::BoSystemInfoManager;
 #[test]
 fn test_event_model() {
-    let events_arr: Vec<BOEvent> = Vec::new();
-    let event_model = BOEventModel {
-        meta: BOMeta {
+    let events_arr: Vec<BoEvent> = Vec::new();
+    let event_model = BoEventModel {
+        meta: BoMeta {
             ..Default::default()
         },
         events: events_arr,
@@ -20,16 +19,8 @@ fn test_event_model() {
 }
 
 #[test]
-fn test_session_info() {
-    let session_info = BOSessionInfo {
-        ..Default::default()
-    };
-    assert!(Some(session_info).is_some());
-}
-
-#[test]
 fn test_secure_data() {
-    let secure_data = BOSecureData {
+    let secure_data = BoSecureData {
         ..Default::default()
     };
     assert!(Some(secure_data).is_some());
@@ -37,7 +28,7 @@ fn test_secure_data() {
 
 #[test]
 fn test_secure_data_model() {
-    let secure_data_model = BOEventSecureDataModel {
+    let secure_data_model = BoEventSecureDataModel {
         ..Default::default()
     };
     assert!(Some(secure_data_model).is_some());
@@ -45,7 +36,7 @@ fn test_secure_data_model() {
 
 #[test]
 fn test_event() {
-    let event = BOEvent {
+    let event = BoEvent {
         ..Default::default()
     };
     assert!(Some(event).is_some());
@@ -53,7 +44,7 @@ fn test_event() {
 
 #[test]
 fn test_manifest_root() {
-    let manifest_root = BOManifestRoot {
+    let manifest_root = BoManifestRoot {
         ..Default::default()
     };
     assert!(Some(manifest_root).is_some());
@@ -61,7 +52,7 @@ fn test_manifest_root() {
 
 #[test]
 fn test_manifest_variable() {
-    let manifest_variable = BOManifestVariable {
+    let manifest_variable = BoManifestVariable {
         ..Default::default()
     };
     assert!(Some(manifest_variable).is_some());
@@ -69,7 +60,7 @@ fn test_manifest_variable() {
 
 #[test]
 fn test_system_info_manager() {
-    let system_info_manager = BOSystemInfoManager {
+    let system_info_manager = BoSystemInfoManager {
         ..Default::default()
     };
     assert!(Some(system_info_manager).is_some());

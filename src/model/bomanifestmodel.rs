@@ -2,14 +2,14 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-pub struct BOManifestRoot {
+pub struct BoManifestRoot {
     #[serde(rename = "variables")]
-    pub variables: Vec<BOManifestVariable>,
+    pub variables: Vec<BoManifestVariable>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-pub struct BOManifestVariable {
+pub struct BoManifestVariable {
     #[serde(rename = "variableId")]
     pub variable_id: i64,
     #[serde(rename = "value")]

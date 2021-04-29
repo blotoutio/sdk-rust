@@ -15,14 +15,14 @@ use rsa::{PaddingScheme, PublicKey, RSAPublicKey};
 const BO_CUSTOM_CODE: u64 = 21100;
 
 #[derive(Default)]
-pub struct BOCommonUtility {}
+pub struct BoCommonUtility {}
 
 lazy_static! {
-    pub static ref BOSHAREDCOMMONUTILITYINSTANCE: Mutex<BOCommonUtility> =
-        Mutex::new(BOCommonUtility::default());
+    pub static ref BOSHAREDCOMMONUTILITYINSTANCE: Mutex<BoCommonUtility> =
+        Mutex::new(BoCommonUtility::default());
 }
 
-impl BOCommonUtility {
+impl BoCommonUtility {
     //get unique device id
     pub fn get_device_id(&self) -> String {
         let mut owned_string: String = Utc::now().timestamp_millis().to_string();
@@ -126,7 +126,7 @@ impl BOCommonUtility {
         // Encrypt
         let data = aes_key.as_bytes();
         let enc_data = pub_key
-            .encrypt(&mut rng, PaddingScheme::PKCS1v15Encrypt, &data[..])
+            .encrypt(&mut rng, PaddingScheme::PKCS1v15Encrypt, data)
             .expect("failed to encrypt");
         base64::encode(&enc_data)
     }

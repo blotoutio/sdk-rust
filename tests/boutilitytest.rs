@@ -1,5 +1,5 @@
 use blotout::utility::bocommonutility::BOSHAREDCOMMONUTILITYINSTANCE;
-use blotout::utility::boerror::BOError;
+use blotout::utility::boerror::BoError;
 use blotout::utility::bofilemanager::BOSHAREDFILEINSTANCE;
 use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
 use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
@@ -219,7 +219,7 @@ pub fn test_shared_manager() {
 
 #[test]
 fn test_enum() {
-    assert!(Some(BOError::ManifestNotAvailable).is_some());
+    assert!(Some(BoError::ManifestNotAvailable).is_some());
 }
 
 #[test]

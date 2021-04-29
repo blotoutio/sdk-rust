@@ -1,10 +1,11 @@
-use crate::model::boeventmodel::BOEventModel;
+use crate::model::boeventmodel::BoEvent;
+use crate::model::boeventmodel::BoEventModel;
 use async_trait::async_trait;
 use failure::Error;
 use serde_json::Value;
 
 #[async_trait]
-pub trait BOEventAPI {
+pub trait BoEventApi {
     /// Send a single message to Blotout.
     async fn send_event(
         &self,
@@ -17,8 +18,8 @@ pub trait BOEventAPI {
     async fn send_sdk_start(&self) -> Result<(), Error>;
 
     //get final payload
-    fn get_payload(&self, events: Vec<BOEvent>) -> BOEventModel;
+    fn get_payload(&self, events: Vec<BoEvent>) -> BoEventModel;
 
     //method to push events using given model
-    async fn publish_events(&self, event_model: BOEventModel) -> Result<(), Error>;
+    async fn publish_events(&self, event_model: BoEventModel) -> Result<(), Error>;
 }

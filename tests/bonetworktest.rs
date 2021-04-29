@@ -1,8 +1,8 @@
-use blotout::model::bomanifestmodel::BOManifestVariable;
-use blotout::network::boeventapi::BOEventAPI;
-use blotout::network::boeventsecuredataapi::BOEventSecureDataAPI;
-use blotout::network::bohttp::BOHttpClient;
-use blotout::network::bomanifestapi::BOManifestAPI;
+use blotout::model::bomanifestmodel::BoManifestVariable;
+use blotout::network::boeventapi::BoEventApi;
+use blotout::network::boeventsecuredataapi::BoEventSecureDataApi;
+use blotout::network::bohttp::BoHttpClient;
+use blotout::network::bomanifestapi::BoManifestApi;
 use blotout::utility::bosharedmanager::BOSHAREDINSTANCE;
 use blotout::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
 use serde_json::Value;
@@ -32,7 +32,7 @@ pub fn set_sdk_info() {
 async fn sdk_init() {
     set_sdk_info();
 
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         "https://stage.blotout.io/sdk".to_owned(),
     );
@@ -53,7 +53,7 @@ async fn test_log_event() {
     let data = "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
         .to_string();
 
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
@@ -75,7 +75,7 @@ async fn test_log_pii_event() {
     let data = "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
         .to_string();
 
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
@@ -97,7 +97,7 @@ async fn test_log_phi_event() {
     let data = "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
         .to_string();
 
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
@@ -114,13 +114,13 @@ async fn test_log_phi_event() {
 
 #[test]
 fn test_create_default_http_client() {
-    let client = BOHttpClient::default();
+    let client = BoHttpClient::default();
     assert!(Some(client).is_some());
 }
 
 #[test]
 fn test_get_session_info_model() {
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
@@ -131,12 +131,12 @@ fn test_get_session_info_model() {
 
 #[test]
 fn test_get_manifest_variable() {
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
 
-    let pii_manifest_variable: BOManifestVariable =
+    let pii_manifest_variable: BoManifestVariable =
         client.get_manifest_variable("PII_Public_Key".to_string());
 
     assert!(Some(pii_manifest_variable).is_some());

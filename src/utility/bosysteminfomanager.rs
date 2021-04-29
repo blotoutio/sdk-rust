@@ -5,17 +5,17 @@ use std::sync::Mutex;
 use sys_info::*;
 
 #[derive(Default)]
-pub struct BOSystemInfoManager {
+pub struct BoSystemInfoManager {
     pub os_type: String,
     pub platform_code: i64,
 }
 
 lazy_static! {
-    pub static ref BOSYSTEMINFOINSTANCE: Mutex<BOSystemInfoManager> =
-        Mutex::new(BOSystemInfoManager::default());
+    pub static ref BOSYSTEMINFOINSTANCE: Mutex<BoSystemInfoManager> =
+        Mutex::new(BoSystemInfoManager::default());
 }
 
-impl BOSystemInfoManager {
+impl BoSystemInfoManager {
     pub fn init_system_info(&mut self) {
         self.os_type = os_type().unwrap();
 

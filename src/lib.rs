@@ -2,10 +2,10 @@ pub mod model;
 pub mod network;
 pub mod utility;
 
-use crate::network::boeventapi::BOEventAPI;
-use crate::network::boeventsecuredataapi::BOEventSecureDataAPI;
-use crate::network::bohttp::BOHttpClient;
-use crate::network::bomanifestapi::BOManifestAPI;
+use crate::network::boeventapi::BoEventApi;
+use crate::network::boeventsecuredataapi::BoEventSecureDataApi;
+use crate::network::bohttp::BoHttpClient;
+use crate::network::bomanifestapi::BoManifestApi;
 use crate::utility::bosharedmanager::BOSHAREDINSTANCE;
 use crate::utility::bosysteminfomanager::BOSYSTEMINFOINSTANCE;
 use serde_json::Value;
@@ -33,7 +33,7 @@ pub async fn bo_sdk_init(token: String, end_point: String) -> bool {
 
     BOSYSTEMINFOINSTANCE.lock().unwrap().init_system_info();
 
-    let client = BOHttpClient::new(reqwest::Client::new(), end_point.to_owned());
+    let client = BoHttpClient::new(reqwest::Client::new(), end_point.to_owned());
     let response = client.get_manifest().await;
 
     if response.is_ok() {
@@ -47,7 +47,7 @@ pub async fn bo_sdk_init(token: String, end_point: String) -> bool {
 }
 
 pub async fn bo_log_event(event_name: String, data: String) -> bool {
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
@@ -58,7 +58,7 @@ pub async fn bo_log_event(event_name: String, data: String) -> bool {
 }
 
 pub async fn bo_log_pii_event(event_name: String, data: String) -> bool {
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
@@ -69,7 +69,7 @@ pub async fn bo_log_pii_event(event_name: String, data: String) -> bool {
 }
 
 pub async fn bo_log_phi_event(event_name: String, data: String) -> bool {
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
@@ -81,7 +81,7 @@ pub async fn bo_log_phi_event(event_name: String, data: String) -> bool {
 }
 
 pub async fn bo_map_id(id: String, provider: String, data: String) -> bool {
-    let client = BOHttpClient::new(
+    let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
     );
