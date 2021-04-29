@@ -13,14 +13,8 @@ pub trait BOEventAPI {
         event_code: u64,
     ) -> Result<(), Error>;
 
-    //send session start event on sdk initilization
-    async fn send_session_start(&self) -> Result<(), Error>;
-
-    //send session sent when app exits, user have to call this explicitly
-    async fn send_session_end(&self) -> Result<(), Error>;
-
-    //send session sent when app exits, user have to call this explicitly
-    fn get_session_info_model(&self) -> BOEvent;
+    //send start event on sdk initialization
+    async fn send_sdk_start(&self) -> Result<(), Error>;
 
     //get final payload
     fn get_payload(&self, events: Vec<BOEvent>) -> BOEventModel;

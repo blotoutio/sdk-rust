@@ -1,7 +1,6 @@
 use crate::model::boeventmodel::BOEvent;
 use crate::model::boeventmodel::BOEventModel;
 use crate::model::boeventmodel::BOEventSecureDataModel;
-use crate::model::boeventmodel::BOGeo;
 use crate::model::boeventmodel::BOMeta;
 use crate::model::boeventmodel::BOPropertiesInfo;
 use crate::model::boeventmodel::BOSecureData;
@@ -89,7 +88,7 @@ impl BOEventAPI for BOHttpClient {
 
         let mut event_sub_code = event_code;
 
-        if (event_code == 0) {
+        if event_code == 0 {
             event_sub_code = BOSHAREDCOMMONUTILITYINSTANCE
                 .lock()
                 .unwrap()
@@ -127,7 +126,7 @@ impl BOEventAPI for BOHttpClient {
         response
     }
 
-    async fn send_session_start(&self) -> Result<(), Error> {
+    async fn send_sdk_start(&self) -> Result<(), Error> {
         if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
             return Ok(());
         }
@@ -163,50 +162,11 @@ impl BOEventAPI for BOHttpClient {
         response
     }
 
-    async fn send_session_end(&self) -> Result<(), Error> {
-        if !BOSHAREDINSTANCE.lock().unwrap().sdk_enabled {
-            return Ok(());
-        }
-
-        let mut events_arr: Vec<BOEvent> = Vec::new();
-        let event_properties = BOPropertiesInfo {
-            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
-            ..Default::default()
-        };
-
-        let event_model = BOEvent {
-            evn: "Session End".to_string(),
-            evcs: 11012,
-            evt: Utc::now().timestamp_millis(),
-            userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
-            properties: event_properties,
-            ..Default::default()
-        };
-
-        events_arr.push(event_model);
-
-        let event_model = self.get_payload(events_arr);
-
-        if BOSHAREDINSTANCE.lock().unwrap().log_enabled {
-            println!(
-                "-----------------Event Session End Model to be posted:------------{:?}",
-                event_model
-            );
-        }
-
-        let response = self.publish_events(event_model).await;
-
-        response
-    }
-
     fn get_payload(&self, events_arr: Vec<BOEvent>) -> BOEventModel {
         let plf_code: i64 = BOSYSTEMINFOINSTANCE.lock().unwrap().platform_code;
         let sdk_version = env!("CARGO_PKG_VERSION").to_string();
 
         let event_model = BOEventModel {
-            geo: BOGeo {
-                ..Default::default()
-            },
             meta: BOMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
@@ -215,44 +175,8 @@ impl BOEventAPI for BOHttpClient {
                     .lock()
                     .unwrap()
                     .get_timezone_offset(),
-                ..Default::default()
             },
             events: events_arr,
-        };
-
-        event_model
-    }
-
-    fn get_session_info_model(&self) -> BOEvent {
-        let end_time = Utc::now().timestamp_millis();
-        let start_time = BOSHAREDINSTANCE
-            .lock()
-            .unwrap()
-            .session_id
-            .to_string()
-            .parse::<i64>()
-            .unwrap();
-        let duration_time = end_time - start_time;
-        let session_info = BOSessionInfo {
-            start: start_time,
-            end: end_time,
-            duration: duration_time,
-        };
-
-        let session_string = serde_json::to_string(&session_info).unwrap();
-        let session_value = serde_json::from_str(session_string.as_str()).unwrap();
-        let event_properties = BOPropertiesInfo {
-            codified_info: session_value,
-            session_id: BOSHAREDINSTANCE.lock().unwrap().session_id.to_string(),
-        };
-
-        let event_model = BOEvent {
-            evn: "Session Info".to_string(),
-            evcs: 11024,
-            evt: Utc::now().timestamp_millis(),
-            userid: BOSHAREDFILEINSTANCE.lock().unwrap().get_user_id(),
-            properties: event_properties,
-            ..Default::default()
         };
 
         event_model
@@ -345,9 +269,6 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let sdk_version = env!("CARGO_PKG_VERSION").to_string();
 
         let event_data_model = BOEventSecureDataModel {
-            geo: BOGeo {
-                ..Default::default()
-            },
             meta: BOMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
@@ -356,7 +277,6 @@ impl BOEventSecureDataAPI for BOHttpClient {
                     .lock()
                     .unwrap()
                     .get_timezone_offset(),
-                ..Default::default()
             },
             pii: BOSecureData {
                 key: encrypted_rsa_key,
@@ -458,9 +378,6 @@ impl BOEventSecureDataAPI for BOHttpClient {
         let sdk_version = env!("CARGO_PKG_VERSION").to_string();
 
         let event_data_model = BOEventSecureDataModel {
-            geo: BOGeo {
-                ..Default::default()
-            },
             meta: BOMeta {
                 osn: BOSYSTEMINFOINSTANCE.lock().unwrap().os_type.to_string(),
                 plf: plf_code,
@@ -469,7 +386,6 @@ impl BOEventSecureDataAPI for BOHttpClient {
                     .lock()
                     .unwrap()
                     .get_timezone_offset(),
-                ..Default::default()
             },
             phi: BOSecureData {
                 key: encrypted_rsa_key,

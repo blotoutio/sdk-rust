@@ -58,7 +58,6 @@ async fn bo_sdk_init(token: String, end_point: String) -> bool {
     BOSYSTEMINFOINSTANCE.lock().unwrap().init_system_info();
 
     let client = BOHttpClient::new(reqwest::Client::new(), end_point.to_owned());
-
     let response = client.get_manifest().await;
 
     if response.is_ok() {
@@ -68,26 +67,6 @@ async fn bo_sdk_init(token: String, end_point: String) -> bool {
     } else {
         false
     }
-}
-
-async fn bo_start_session() -> bool {
-    let client = BOHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let response = client.send_session_start().await;
-    response.is_ok()
-}
-
-async fn bo_end_session() -> bool {
-    let client = BOHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let response = client.send_session_end().await;
-    response.is_ok()
 }
 
 async fn bo_log_event(event_name: String, data: String) -> bool {

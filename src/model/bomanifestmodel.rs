@@ -1,14 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-/// A manifest event.
-
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize, Default)]
-pub struct BOManifestModel {
-    pub geo_ip_path: String,
-    pub server_base_url: String,
-    pub event_path: String,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct BOManifestRoot {

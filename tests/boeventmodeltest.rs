@@ -1,11 +1,9 @@
 use blotout::model::boeventmodel::BOEvent;
 use blotout::model::boeventmodel::BOEventModel;
 use blotout::model::boeventmodel::BOEventSecureDataModel;
-use blotout::model::boeventmodel::BOGeo;
 use blotout::model::boeventmodel::BOMeta;
 use blotout::model::boeventmodel::BOSecureData;
 use blotout::model::boeventmodel::BOSessionInfo;
-use blotout::model::bomanifestmodel::BOManifestModel;
 use blotout::model::bomanifestmodel::BOManifestRoot;
 use blotout::model::bomanifestmodel::BOManifestVariable;
 use blotout::utility::bosysteminfomanager::BOSystemInfoManager;
@@ -13,9 +11,6 @@ use blotout::utility::bosysteminfomanager::BOSystemInfoManager;
 fn test_event_model() {
     let events_arr: Vec<BOEvent> = Vec::new();
     let event_model = BOEventModel {
-        geo: BOGeo {
-            ..Default::default()
-        },
         meta: BOMeta {
             ..Default::default()
         },
@@ -62,14 +57,6 @@ fn test_manifest_root() {
         ..Default::default()
     };
     assert!(Some(manifest_root).is_some());
-}
-
-#[test]
-fn test_manifest_model() {
-    let manifest_model = BOManifestModel {
-        ..Default::default()
-    };
-    assert!(Some(manifest_model).is_some());
 }
 
 #[test]

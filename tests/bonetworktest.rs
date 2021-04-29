@@ -69,42 +69,6 @@ async fn test_log_event() {
 }
 
 #[tokio::test]
-async fn bo_start_session() {
-    set_sdk_info();
-
-    let client = BOHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let response = client.send_session_start().await;
-
-    if response.is_ok() {
-        assert!(true)
-    } else {
-        assert!(false)
-    }
-}
-
-#[tokio::test]
-async fn bo_end_session() {
-    set_sdk_info();
-
-    let client = BOHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let response = client.send_session_end().await;
-
-    if response.is_ok() {
-        assert!(true)
-    } else {
-        assert!(false)
-    }
-}
-
-#[tokio::test]
 async fn test_log_pii_event() {
     set_sdk_info();
 

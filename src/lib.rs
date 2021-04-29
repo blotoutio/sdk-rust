@@ -34,36 +34,16 @@ pub async fn bo_sdk_init(token: String, end_point: String) -> bool {
     BOSYSTEMINFOINSTANCE.lock().unwrap().init_system_info();
 
     let client = BOHttpClient::new(reqwest::Client::new(), end_point.to_owned());
-
     let response = client.get_manifest().await;
 
     if response.is_ok() {
-        let session_response = client.send_session_start().await;
+        let session_response = client.send_sdk_start().await;
         println!("{:?}", session_response.is_err());
         true
     } else {
         println!("Manifest pull failed. Please check sdk key and end point!");
         false
     }
-}
-
-pub async fn bo_start_session() -> bool {
-    let client = BOHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-    let response = client.send_session_start().await;
-    response.is_ok()
-}
-
-pub async fn bo_end_session() -> bool {
-    let client = BOHttpClient::new(
-        reqwest::Client::new(),
-        BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
-    );
-
-    let response = client.send_session_end().await;
-    response.is_ok()
 }
 
 pub async fn bo_log_event(event_name: String, data: String) -> bool {
