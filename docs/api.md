@@ -64,16 +64,14 @@ pub async fn bo_log_phi_event(event_name: String, data: String) -> bool
 
 #### Example
 
-```js
+```rust
 event_name = "registration";
 data = r#"{
     "email id": "user@example.com",
     "gender": "female"
 }"#;
 bo_log_pii_event(event_name.to_string(), data.to_string()).await;
-
 ```
-
 
 ## mapID
 The `bo_map_id` method allows you to map external services to Blotout ID.
@@ -83,17 +81,17 @@ The `bo_map_id` method allows you to map external services to Blotout ID.
 
 |||||
 |---|---|---|---|
-| `externalId` | `String` |  | External ID that you want to link to Blotout ID |
+| `external_id` | `String` |  | External ID that you want to link to Blotout ID |
 | `provider` | `String` |  | Provider that generated external ID, for example `hubspot` |
 | `data` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 
 #### Example
-```js
-id = "92j2jr230r-232j9j2342j3-jiji";
+```rust
+external_id = "92j2jr230r-232j9j2342j3-jiji";
 provider = "hubspot";
 data = r#"{
     "email id": "user@example.com",
     "gender": "female"
 }"#;
-bo_map_id(id.to_string(), provider.to_string(), data.to_string()).await;
+bo_map_id(external_id.to_string(), provider.to_string(), data.to_string()).await;
 ```

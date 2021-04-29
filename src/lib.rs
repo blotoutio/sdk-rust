@@ -73,7 +73,7 @@ pub async fn bo_log_phi_event(event_name: String, data: String) -> bool {
     response.is_ok()
 }
 
-pub async fn bo_map_id(id: String, provider: String, data: String) -> bool {
+pub async fn bo_map_id(external_id: String, provider: String, data: String) -> bool {
     let client = BoHttpClient::new(
         reqwest::Client::new(),
         BOSHAREDINSTANCE.lock().unwrap().base_url.to_string(),
@@ -81,7 +81,7 @@ pub async fn bo_map_id(id: String, provider: String, data: String) -> bool {
 
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
     let mut map_object = data.as_object().unwrap().clone();
-    map_object.insert(BO_MAP_ID.to_string(), serde_json::Value::String(id));
+    map_object.insert(BO_MAP_ID.to_string(), serde_json::Value::String(external_id));
     map_object.insert(
         BO_MAP_PROVIDER.to_string(),
         serde_json::Value::String(provider),
