@@ -64,10 +64,7 @@ pub fn load_persisted_data() -> bool {
     };
 
     if !contents.is_empty() {
-        let result = serde_json::from_str(&*contents);
-        if result.is_ok() {
-            data = result.unwrap()
-        }
+        data = serde_json::from_str(&*contents).unwrap_or(data);
     }
 
     if data.user_id.is_empty() {

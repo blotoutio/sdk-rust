@@ -36,15 +36,20 @@ pub async fn init(token: String, endpoint_url: String) -> bool {
     }
 }
 
-pub async fn capture(event_name: String, event_data: String) -> bool {
+pub async fn capture(event_name: String, event_data: String, screen_name: String) -> bool {
     let data_json: Value = serde_json::from_str(event_data.as_str()).unwrap();
-    let response = send_event(event_name.as_str(), EventType::Codified, data_json, 0).await;
+    let response = send_event(event_name, EventType::Codified, screen_name, data_json, 0).await;
     response.is_ok()
 }
 
-pub async fn capture_personal(event_name: String, event_data: String, is_phi: bool) -> bool {
+pub async fn capture_personal(
+    event_name: String,
+    event_data: String,
+    is_phi: bool,
+    screen_name: String,
+) -> bool {
     let data_json: Value = serde_json::from_str(event_data.as_str()).unwrap();
-    let response = send_personal_event(event_name.as_str(), data_json, is_phi).await;
+    let response = send_personal_event(event_name, screen_name, data_json, is_phi).await;
     response.is_ok()
 }
 
@@ -61,8 +66,9 @@ pub async fn map_id(external_id: String, provider: String, data: String) -> bool
     );
 
     let response = send_event(
-        MAP_ID_NAME,
+        MAP_ID_NAME.to_string(),
         EventType::Codified,
+        "".to_string(),
         Value::Object(data_value),
         MAP_ID_CODE,
     )

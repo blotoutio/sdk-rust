@@ -14,8 +14,9 @@ const SDK_START_CODE: u64 = 11130;
 const SDK_START_NAME: &str = "sdk_start";
 
 pub async fn send_event(
-    event_name: &str,
+    event_name: String,
     event_type: EventType,
+    screen_name: String,
     event_data: Value,
     event_code: u64,
 ) -> Result<(), Error> {
@@ -37,7 +38,7 @@ pub async fn send_event(
         evn: event_name.to_string(),
         evcs: event_sub_code,
         event_type: event_type.to_string().to_lowercase(),
-        scrn: "".to_string(),
+        scrn: screen_name,
         evt: Utc::now().timestamp_millis(),
         session_id,
         additional_data: event_data,
@@ -53,11 +54,19 @@ pub async fn send_event(
 
 pub async fn send_sdk_start() -> Result<(), Error> {
     let data = json!({});
-    send_event(SDK_START_NAME, EventType::System, data, SDK_START_CODE).await
+    send_event(
+        SDK_START_NAME.to_string(),
+        EventType::System,
+        "".to_string(),
+        data,
+        SDK_START_CODE,
+    )
+    .await
 }
 
 pub async fn send_personal_event(
-    event_name: &str,
+    event_name: String,
+    screen_name: String,
     event_data: Value,
     is_phi: bool,
 ) -> Result<(), Error> {
@@ -73,5 +82,5 @@ pub async fn send_personal_event(
 
     let data: PersonalData = encrypt_data(event_data, public_key.value);
 
-    send_event(event_name, event_type, json!(data), 0).await
+    send_event(event_name, event_type, screen_name, json!(data), 0).await
 }

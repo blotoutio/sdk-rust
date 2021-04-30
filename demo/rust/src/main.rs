@@ -20,23 +20,27 @@ async fn main() {
        Logging custom events that helps us understand
        what user is doing the application
     */
-    let mut event_name = "application_started";
+    let mut event_name = "add_to_cart".to_string();
+    let mut screen_name = "home".to_string();
     let mut data = r#"{
-        "someProperty": "some value"
-    }"#;
-    bo_capture(event_name.to_string(), data.to_string()).await;
+        "item": "phone"
+    }"#
+    .to_string();
+    bo_capture(event_name, data, screen_name).await;
 
     /*
        When user register or fill our form it's good to log this data
        as it will help us connect analytics data. This events are called PII events.
        PII - Personal Identifiable Information
     */
-    event_name = "registration";
+    event_name = "user_registration".to_string();
+    screen_name = "registration".to_string();
     data = r#"{
         "email": "user@example.com",
         "gender": "female"
-    }"#;
-    bo_capture_personal(event_name.to_string(), data.to_string(), false).await;
+    }"#
+    .to_string();
+    bo_capture_personal(event_name, data, false, screen_name).await;
 
     /*
        If user fills out any data that is related to health and you want to log it,
@@ -44,20 +48,23 @@ async fn main() {
        than PII events.
        PHI - Personal Health Information
     */
-    event_name = "blood_group";
+    event_name = "blood_group".to_string();
+    screen_name = "signup".to_string();
     data = r#"{
-        "email id": "user@example.com",
         "bloodGroup": "A+ve"
-    }"#;
-    bo_capture_personal(event_name.to_string(), data.to_string(), true).await;
+    }"#
+    .to_string();
+    bo_capture_personal(event_name, data, true, screen_name).await;
 
     /*
         Map ID
      */
+    let map_id = "2f28023hj0-2323-23232".to_string();
+    let map_provider = "service".to_string();
     data = r#"{
-        "someProperty": "some value"
-    }"#;
-    bo_map_id("2f28023hj0-2323-23232".to_string(), "service".to_string(), data.to_string()).await;
+        "lang": "en"
+    }"#.to_string();
+    bo_map_id(map_id, map_provider, data).await;
 
     /*
         Get user ID

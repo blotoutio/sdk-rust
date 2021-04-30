@@ -1,4 +1,4 @@
-use crate::common::api::{
+use blotout::common::api::{
     capture, capture_personal, enable_log, enable_sdk, get_user_id, init, map_id,
 };
 
@@ -12,40 +12,61 @@ async fn main() {
     )
     .await;
 
-    let data = "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
-        .to_string();
-    bo_capture("rust_event".to_string(), data).await;
+    let mut event_name = "add_to_cart".to_string();
+    let mut screen_name = "home".to_string();
+    let mut data = r#"{
+        "item": "phone"
+    }"#
+    .to_string();
+    bo_capture(event_name, data, screen_name).await;
 
-    let map_data =
-        "{\"some property\": \"some value\", \"some other property\": \"some other value\"}"
-            .to_string();
+    event_name = "user_registration".to_string();
+    screen_name = "registration".to_string();
+    data = r#"{
+        "email": "user@example.com",
+        "gender": "female"
+    }"#
+    .to_string();
+    bo_capture_personal(event_name, data, false, screen_name).await;
 
-    bo_map_id("abcd".to_string(), "google".to_string(), map_data).await;
+    event_name = "blood_group".to_string();
+    screen_name = "signup".to_string();
+    data = r#"{
+        "bloodGroup": "A+ve"
+    }"#
+    .to_string();
+    bo_capture_personal(event_name, data, true, screen_name).await;
 
-    let pii_data =
-        "{\"email id\": \"ankuradhikari08@gmail.com\", \"gender\": \"male\"}".to_string();
-    bo_capture_personal("PII Event".to_string(), pii_data, false).await;
+    let map_id = "2f28023hj0-2323-23232".to_string();
+    let map_provider = "service".to_string();
+    data = r#"{
+        "lang": "en"
+    }"#
+    .to_string();
+    bo_map_id(map_id, map_provider, data).await;
 
-    let phi_data = "{\"email id\": \"ankur@blotout.io\", \"gender\": \"male\"}".to_string();
-    bo_capture_personal("PHI Event".to_string(), phi_data, true).await;
-
-    bo_end_session().await;
+    println!("User ID: {}", bo_get_user_id());
 }
 
 pub async fn bo_init(token: String, endpoint_url: String) -> bool {
     init(token, endpoint_url).await
 }
 
-pub async fn bo_capture(event_name: String, data: String) -> bool {
-    capture(event_name, data).await
+pub async fn bo_capture(event_name: String, data: String, screen_name: String) -> bool {
+    capture(event_name, data, screen_name).await
 }
 
-pub async fn bo_capture_personal(event_name: String, data: String, is_phi: bool) -> bool {
-    capture_personal(event_name, data, is_phi).await
+pub async fn bo_capture_personal(
+    event_name: String,
+    data: String,
+    is_phi: bool,
+    screen_name: String,
+) -> bool {
+    capture_personal(event_name, data, is_phi, screen_name).await
 }
 
 pub async fn bo_map_id(external_id: String, provider: String, data: String) -> bool {
-    map_id(external_id, provider, data)
+    map_id(external_id, provider, data).await
 }
 
 pub fn bo_enable_log(enable: bool) {

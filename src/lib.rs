@@ -10,12 +10,17 @@ pub async fn bo_init(token: String, endpoint_url: String) -> bool {
     init(token, endpoint_url).await
 }
 
-pub async fn bo_capture(event_name: String, data: String) -> bool {
-    capture(event_name, data).await
+pub async fn bo_capture(event_name: String, data: String, screen_name: String) -> bool {
+    capture(event_name, data, screen_name).await
 }
 
-pub async fn bo_capture_personal(event_name: String, data: String, is_phi: bool) -> bool {
-    capture_personal(event_name, data, is_phi).await
+pub async fn bo_capture_personal(
+    event_name: String,
+    data: String,
+    is_phi: bool,
+    screen_name: String,
+) -> bool {
+    capture_personal(event_name, data, is_phi, screen_name).await
 }
 
 pub async fn bo_map_id(external_id: String, provider: String, data: String) -> bool {

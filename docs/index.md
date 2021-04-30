@@ -1,4 +1,4 @@
-# SDK RUST
+# SDK Rust
 
 Blotout’s SDK offers companies all of the analytics and remarketing tools they are accustomed to,
 while offering best-in-class privacy preservation for the company’s users. Blotout’s SDK is out of the
