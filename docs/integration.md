@@ -1,8 +1,8 @@
 # Integration
 
-SDK Download Link: https://github.com/blotoutio/sdk-rust
+SDK Download Link: [https://github.com/blotoutio/sdk-rust](https://github.com/blotoutio/sdk-rust)
 
-Rust SDK C++ Wrapper: https://github.com/blotoutio/sdk-rust-ffi
+Rust SDK C++ Wrapper: [https://github.com/blotoutio/sdk-rust-ffi](https://github.com/blotoutio/sdk-rust-ffi)
 
 ## Initialization
 
