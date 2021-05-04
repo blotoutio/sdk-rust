@@ -1,0 +1,10 @@
+[package]
+name = "rust-example"
+version = "0.1.0"
+authors = ["Blotout Inc <support@blotout.io>"]
+edition = "2018"
+
+[dependencies]
+blotout = {path = "../..", version = "0.1.0"}
+futures = "0.3"
+tokio = { version = "0.2", features = ["full","macros"] }

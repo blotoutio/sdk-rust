@@ -1,0 +1,39 @@
+[package]
+name = "blotout"
+version = "0.1.0"
+authors = ["Blotout Inc <support@blotout.io>"]
+edition = "2018"
+
+[features]
+cli = ["clap"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "blotout"
+path = "src/main.rs"
+required-features = ["cli"]
+
+
+[dependencies]
+failure = "0.1.8"
+reqwest = { version = "0.10.8", features = ["json"] }
+serde_json = "1.0.59"
+clap = { version = "2.33.3", optional = true }
+tokio = { version = "0.2", features = ["full","macros"] }
+async-trait = "0.1.41"
+futures = "0.3"
+lazy_static = "1.4"
+rand = "0.7.3"
+sys-info = "0.7"
+chrono = { version = "0.4.19", features = ["serde"] }
+serde = { version = "1.0.116", features = ["derive"] }
+libc = "0.2.79"
+rust-crypto= "0.2.36"
+rsa = "0.3.0"
+base64 = "0.13.0"
+
+[profile.release]
+panic = 'abort'
+
+[profile.dev]
+panic = "abort"
