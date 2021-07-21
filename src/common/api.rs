@@ -1,6 +1,7 @@
 use crate::common::file_manager::load_persisted_data;
 use crate::common::shared_manager::BOSHAREDINSTANCE;
 use crate::common::system_info_manager::BOSYSTEMINFOINSTANCE;
+use crate::model::map_id::MapIDData;
 use crate::model::payload::EventType;
 use crate::network::event_api::{send_event, send_personal_event, send_sdk_start};
 use crate::network::manifest_api::get_manifest;
@@ -53,16 +54,16 @@ pub async fn capture_personal(
     response.is_ok()
 }
 
-pub async fn map_id(external_id: String, provider: String, data: String) -> bool {
+pub async fn map_id(map_id_data: MapIDData, data: String) -> bool {
     let data: Value = serde_json::from_str(data.as_str()).unwrap();
     let mut data_value = data.as_object().unwrap().clone();
     data_value.insert(
         MAP_ID_NAME.to_string(),
-        serde_json::Value::String(external_id),
+        serde_json::Value::String(map_id_data.external_id),
     );
     data_value.insert(
         MAP_ID_PROVIDER.to_string(),
-        serde_json::Value::String(provider),
+        serde_json::Value::String(map_id_data.provider),
     );
 
     let response = send_event(
