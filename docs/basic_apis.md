@@ -70,30 +70,6 @@ let screen_name = "signup";
 bo_capture_personal(event_name.to_string(), data.to_string(), false, screen_name.to_string()).await;
 ```
 
-## bo_map_id
-The `bo_map_id` method allows you to map external services to Blotout ID.
-
-#### Input
-
-||||
-|---|---|---|
-| `external_id` | `String` | External ID that you want to link to Blotout ID |
-| `provider` | `String` | Provider that generated external ID, for example `hubspot` |
-| `event_data` | `String` | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-
-#### Example
-```rust
-use blotout::bo_map_id;
-
-let external_id = "92j2jr230r-232j9j2342j3-jiji";
-let provider = "hubspot";
-let data = r#"{
-    "lang": "en"
-}"#;
-
-bo_map_id(external_id.to_string(), provider.to_string(), data.to_string()).await;
-```
-
 ## bo_enable_log
 The `bo_enable_log` method allows you to print all SDK logs on console.
 

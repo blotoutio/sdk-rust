@@ -1,4 +1,5 @@
 use blotout::{bo_init, bo_capture, bo_capture_personal, bo_map_id, bo_enable_log, bo_get_user_id};
+use blotout::model::map_id::MapIDData;
 
 const TOKEN: &str = "7T3VGKRTMZND4Q9"; // Application key
 const END_POINT: &str = "https://stage.blotout.io/sdk"; // <1P Container Domain>
@@ -59,12 +60,14 @@ async fn main() {
     /*
         Map ID
      */
-    let map_id = "2f28023hj0-2323-23232".to_string();
-    let map_provider = "service".to_string();
+    let map_data = MapIDData {
+        external_id: "2f28023hj0-2323-23232".to_string(),
+        provider: "service".to_string(),
+    };
     data = r#"{
         "lang": "en"
     }"#.to_string();
-    bo_map_id(map_id, map_provider, data).await;
+    bo_map_id(map_data, data).await;
 
     /*
         Get user ID
